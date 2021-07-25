@@ -1,0 +1,26 @@
+{
+    "attributes":{
+        "id": {"type":"id"},
+        "name":{"type":"str", "max":20, "required":true},
+        "email":{"type":"email", "max":20, "required":true},
+        "password":{"type":"password", "max":100, "required":false}
+    },
+    "create":{
+        "__extends":{
+            "from":"attributes",
+            "__excludes":["id"]
+        }
+    },
+    "list":{
+        "__extends":{
+            "from":"attributes",
+            "__excludes":["password"]
+        }
+    },
+    "get":{
+        "__extends":{
+            "from":"create",
+            "__excludes":[ "id"]
+        }
+    }
+}

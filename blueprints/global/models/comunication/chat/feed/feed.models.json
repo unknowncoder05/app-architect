@@ -1,0 +1,23 @@
+{
+    "attributes":{
+        "id": {"type":"id"},
+        "reactions":{"many":true, "type":"reaction", "required":true}
+    },
+    "create":{
+        "__extends":{
+            "from":"attributes",
+            "__excludes":["id"]
+        }
+    },
+    "list":{
+        "__extends":{
+            "from":"attributes"
+        }
+    },
+    "get":{
+        "__extends":{
+            "from":"create",
+            "__excludes":[ "id"]
+        }
+    }
+}

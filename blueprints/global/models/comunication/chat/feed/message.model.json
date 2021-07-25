@@ -1,0 +1,8 @@
+{
+    "attributes":{
+        "feed":{"type":"feed", "required":true}
+    },
+    "__extends":{
+        "from":"global.models.comunication.chat.message"
+    }
+}

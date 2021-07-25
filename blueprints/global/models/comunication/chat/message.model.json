@@ -1,0 +1,30 @@
+{
+    "__constructor":{
+        "user":{
+            "description":"user to be used"
+        }
+    },
+    "attributes":{
+        "id": {"type":"id", "required":true},
+        "conversation": {"type":"conversation", "required":true},
+        "user":{"type":"__user", "required":true},
+        "content":{"type":"str", "required":true}
+    },
+    "create":{
+        "__extends":{
+            "from":"attributes",
+            "__excludes":["id"]
+        }
+    },
+    "list":{
+        "__extends":{
+            "from":"attributes"
+        }
+    },
+    "get":{
+        "__extends":{
+            "from":"create",
+            "__excludes":[ "id"]
+        }
+    }
+}
