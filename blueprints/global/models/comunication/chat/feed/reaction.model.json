@@ -1,7 +1,13 @@
 {
+    "__constructor":{
+        "user":{
+            "description":"user to be used"
+        }
+    },
     "attributes":{
         "id": {"type":"id"},
-        "reactions":{"many":true, "type":"reaction", "required":true}
+        "type":{"many":true, "type":"str", "required":true},
+        "owner":{"type":"__user", "required":true}
     },
     "create":{
         "__extends":{

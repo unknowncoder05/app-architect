@@ -6,6 +6,6 @@
         "message":"globa.models.comunication.chat.feed.message"
     },
     "services": {
-        "questions":"service.questions"
+        "questions":"service.chat"
     }
 }

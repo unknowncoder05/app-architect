@@ -1,0 +1,39 @@
+{
+    "endpoints":{
+        "create conversation":{
+            "request":{
+                "conversation" : {
+                    "type": "conversation.create"
+                }
+            },
+            "response":{
+                "conversation" : {"type": "conversation.list"}
+            }
+        },
+        "list user conversations":{
+            "request":{
+                "__extends":{
+                    "from":"global.models.pagination.request",
+                    "include":["page", "page_size"]
+                },
+                "user" : {"type": "user.attributes.id"}
+            },
+            "response":{
+                "__extends":{
+                    "from":"global.models.pagination.response",
+                    "include":["total_count", "page_count"]
+                },
+                "conversations" : {"many": true, "type": "conversation.list"}
+            }
+        },
+        "get conversation":{
+            "request":{
+                "id" : {"type": "conversation.attributes.id"}
+            },
+            "response":{
+                "conversation" : {"type": "conversation.get"}
+            }
+        }
+        
+    }
+}

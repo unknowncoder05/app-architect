@@ -1,6 +1,11 @@
 {
+    "__constructor":{
+        "user":{
+            "description":"user to be used"
+        }
+    },
     "attributes":{
-        "feed":{"type":"feed", "required":true}
+        "feed":{"type":"feed", "required":true, "user":"__user"}
     },
     "__extends":{
         "from":"global.models.comunication.chat.message"
