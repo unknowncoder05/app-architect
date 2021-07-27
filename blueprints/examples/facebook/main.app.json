@@ -2,10 +2,10 @@
     "name": "facebook",
     "models": {
         "user":"global.models.user",
-        "conversation":"global.models.comunication.chat.conversation",
-        "message":"global.models.comunication.chat.feed.message"
+        "conversation":"global.comunication.chat.models.conversation",
+        "message":"global.comunication.chat.feed.models.message"
     },
     "services": {
-        "user":"global.services.user"
+        "user":"global.utils.services.user"
     }
 }
