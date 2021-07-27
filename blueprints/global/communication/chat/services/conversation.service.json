@@ -1,0 +1,45 @@
+{
+    "__constructor":{
+        "conversation":{
+            "description":"conversation model to be used",
+            "default":"global.communication.chat.models.conversation"
+        }
+    },
+    "endpoints":{
+        "create conversation":{
+            "request":{
+                "conversation" : {
+                    "type": "__conversation.create"
+                }
+            },
+            "response":{
+                "conversation" : {"type": "__conversation.list"}
+            }
+        },
+        "list user conversations":{
+            "request":{
+                "__extends":{
+                    "from":"global.utils.models.pagination.request",
+                    "include":["page", "page_size"]
+                },
+                "user" : {"type": "__conversation.__user.attributes.id"}
+            },
+            "response":{
+                "__extends":{
+                    "from":"global.utils.models.pagination.response",
+                    "include":["total_count", "page_count"]
+                },
+                "conversations" : {"many": true, "type": "__conversation.list"}
+            }
+        },
+        "get conversation":{
+            "request":{
+                "id" : {"type": "__conversation.attributes.id"}
+            },
+            "response":{
+                "conversation" : {"type": "__conversation.get"}
+            }
+        }
+        
+    }
+}

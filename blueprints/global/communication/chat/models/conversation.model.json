@@ -1,7 +1,8 @@
 {
     "__constructor":{
         "user":{
-            "description":"user to be used"
+            "description":"user model to be used",
+            "default":"global.auth.user.models.user"
         }
     },
     "attributes":{

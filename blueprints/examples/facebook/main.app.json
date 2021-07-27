@@ -3,9 +3,9 @@
     "models": {
         "user":"global.models.user",
         "conversation":"global.models.comunication.chat.conversation",
-        "message":"globa.models.comunication.chat.feed.message"
+        "message":"global.models.comunication.chat.feed.message"
     },
     "services": {
-        "questions":"service.chat"
+        "user":"global.services.user"
     }
 }
