@@ -25,3 +25,55 @@ defines all the models for a specific entity and its different variants dependin
 Denoted with the extension ".service.json" (ex: "auth.service.json")
 
 defines the inputs, input processing and outputs of a certain request
+
+## Global special attributes
+
+### __constructor
+lets you specify wich attributes can be modified and are required
+
+use case:
+
+``` js
+// basic_math_service.service.json
+{
+    "__constructor":{
+        "number_a" : {
+            "description": "first number to be operated"
+            "default": 1
+        },
+        "number_a" : {
+            "description": "second number to be operated"
+            "default": 2
+        }
+    },
+    "endpoints":{
+        "sum numbers":{
+            "request":{
+                "__number_a" : {
+                    "type": "int",
+                },
+                "__number_b" : {
+                    "type": "int",
+                }
+            },
+            "response":{
+                "answer" : {"type": "int"}
+            }
+        },
+    }
+}
+```
+
+now you can call it like
+``` js
+//main.app.json
+{
+    "services":{
+        "math": {
+            "__from":"basic_math_service.service.json"
+            "number_a":3,
+            "number_b":4,
+        }
+    }
+}
+```

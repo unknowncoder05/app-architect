@@ -1,7 +1,9 @@
 import json
-from searcher import search_json
+from utils.searcher import search_json
 MODELS_FIELD = "models"
-EXTENDS_FIELD = "__extends"
+SPECIAL_FIELD_FLAG="__"
+EXTENDS_FIELD = SPECIAL_FIELD_FLAG+"extends"
+
 
 class Compiler:
     blueprint:dict = {}
@@ -13,8 +15,12 @@ class Compiler:
         if MODELS_FIELD not in self.blueprint and EXTENDS_FIELD not in self.blueprint:
             raise NameError("models is not defined")
         for model in self.blueprint["models"]:
-            print(model)
+            if model.startswith(SPECIAL_FIELD_FLAG):
+                if model == "__extends":
+                    print("extends!")
+                    # Extend
+                continue
             if type(model) == str:
-                search_json(model, self.main_file)
+                print("model", search_json(self.blueprint["models"][model], self.main_file))
     def compile(self):
         self.compile_models()

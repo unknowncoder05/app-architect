@@ -1,10 +1,10 @@
 from json_compiler.Compiler import Compiler as json_compiler
 import sys
 COMPILERS = {
-    "django-postgres": "under development",
-    "flask-mongo": "under development",
-    "nodejs-mongo": "under development",
-    "json": json_compiler
+    "django-postgres.v1": "under development",
+    "flask-mongo.v1": "under development",
+    "nodejs-mongo.v1": "under development",
+    "json.v1": json_compiler
 }
 def compile(compiler_name, project_name):
     compiler = COMPILERS[compiler_name](project_name)
@@ -18,4 +18,4 @@ def main():
     return
 
 main()
-#python .\compiler.py c json ../blueprints/examples/facebook/main.app.json
+#python .\compiler.py c "json.v1" ../blueprints/examples/facebook/main.app.json
