@@ -1,0 +1,31 @@
+{
+    "__constructor":{
+        "user":{
+            "description":"user model to be used",
+            "default":"global.auth.user.models.user"
+        }
+    },
+    "attributes":{
+        "id": {"type":"id", "required":true},
+        "name": {"type":"str", "max":50, "required":true},
+        "users":{"many":true,"type":"__user", "required":true},
+        "read_by":{"many":true, "type":"__user", "required":true}
+    },
+    "create":{
+        "__extends":{
+            "from":"attributes",
+            "__excludes":["id"]
+        }
+    },
+    "list":{
+        "__extends":{
+            "from":"attributes"
+        }
+    },
+    "get":{
+        "__extends":{
+            "from":"create",
+            "__excludes":[ "id"]
+        }
+    }
+}

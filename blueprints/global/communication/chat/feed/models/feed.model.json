@@ -1,0 +1,28 @@
+{
+    "__constructor":{
+        "user":{
+            "description":"user to be used"
+        }
+    },
+    "attributes":{
+        "id": {"type":"id"},
+        "reactions":{"many":true, "type":"reaction", "required":true, "user":"__user"}
+    },
+    "create":{
+        "__extends":{
+            "from":"attributes",
+            "__excludes":["id"]
+        }
+    },
+    "list":{
+        "__extends":{
+            "from":"attributes"
+        }
+    },
+    "get":{
+        "__extends":{
+            "from":"create",
+            "__excludes":[ "id"]
+        }
+    }
+}

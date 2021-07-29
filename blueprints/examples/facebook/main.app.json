@@ -1,0 +1,13 @@
+{
+    "name": "facebook",
+    "models": {
+        "user":"global.models.user",
+        "conversation":"global.communication.chat.models.conversation",
+        "message":"global.communication.chat.feed.models.message"
+    },
+    "services": {
+        "user":"global.utils.services.user",
+        "conversation":"global.communication.chat.services.conversation",
+        "message":"global.communication.chat.services.message"
+    }
+}
