@@ -8,6 +8,6 @@
         "feed":{"type":"feed", "required":true, "user":"__user"}
     },
     "__extends":{
-        "from":"global.comunication.chat.models.message"
+        "from":"global.communication.chat.models.message"
     }
 }
