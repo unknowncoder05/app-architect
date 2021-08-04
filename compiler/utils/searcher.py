@@ -18,12 +18,13 @@ def get_json_file(splitted_route, dir_path):
             #get_json(file_name.)
     return False
 
-def search_json(route, base_file):
+def search_json(route, *, base_folder=None):
     splitted_route = route.split(".")
     # Local Path
-    json_component = get_json_file(splitted_route, os.path.dirname(base_file))
-    if json_component:
-        return json_component
+    if base_folder:
+        json_component = get_json_file(splitted_route, base_folder)
+        if json_component:
+            return json_component
     # Global Path
     json_component = get_json_file(splitted_route, GLOBAL_ROUTE)
     if json_component:
