@@ -1,0 +1,9 @@
+{
+    "name": "imports",
+    "models": {
+        "user":"global.utils.auth.user.models.user"
+    },
+    "services": {
+        "user":"global.utils.services.user"
+    }
+}
