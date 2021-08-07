@@ -27,9 +27,7 @@
             },
             "get":{
                 "request":{
-                    "name":{"type":"str", "max":20, "required":true},
-                    "email":{"type":"email", "max":20, "required":true},
-                    "password":{"type":"password", "max":100, "required":false}
+                    "id": {"type":"id"}
                 },
                 "response":{
                     "name":{"type":"str", "max":20, "required":true},

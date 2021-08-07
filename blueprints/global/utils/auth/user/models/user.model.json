@@ -37,7 +37,7 @@
         "response":{
             "__extends":{
                 "from":"attributes",
-                "__includes":["id"]
+                "__excludes":["id"]
             }
         }
     }
