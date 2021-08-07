@@ -3,20 +3,6 @@
     "models": {
     },
     "services": {
-        "operate":{
-            "endpoints": {
-                "sum":{
-                    "request":{"a":{"type":"int"}, "b":{"type":"int"}},
-                    "response":{"a":{"type":"int"}, "b":{"type":"int"}},
-                    "processing":{
-                        "engine": "python3.8",
-                        "code": [
-                            "print(f\"summing\" {a} + {b})",
-                            "return a+b"
-                        ]
-                    }
-                }
-            }
-        }
+        "operate":"services.operate"
     }
 }

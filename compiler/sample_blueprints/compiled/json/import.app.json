@@ -1,0 +1,43 @@
+{
+    "name": "imports",
+    "models": {
+        "user":{
+            "attributes":{
+                "id": {"type":"id"},
+                "name":{"type":"str", "max":20, "required":true},
+                "email":{"type":"email", "max":20, "required":true},
+                "password":{"type":"password", "max":100, "required":false}
+            },
+            "create":{
+                "request":{
+                    "name":{"type":"str", "max":20, "required":true},
+                    "email":{"type":"email", "max":20, "required":true},
+                    "password":{"type":"password", "max":100, "required":false}
+                },
+                "response":{
+                    "id": {"type":"id"}
+                }
+            },
+            "list":{
+                "response":{
+                    "id": {"type":"id"},
+                    "name":{"type":"str", "max":20, "required":true},
+                    "email":{"type":"email", "max":20, "required":true}
+                }
+            },
+            "get":{
+                "request":{
+                    "id": {"type":"id"}
+                },
+                "response":{
+                    "name":{"type":"str", "max":20, "required":true},
+                    "email":{"type":"email", "max":20, "required":true},
+                    "password":{"type":"password", "max":100, "required":false}
+                }
+            }
+        }
+    },
+    "services": {
+        "user":"global.utils.services.user"
+    }
+}

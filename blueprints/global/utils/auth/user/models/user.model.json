@@ -6,21 +6,39 @@
         "password":{"type":"password", "max":100, "required":false}
     },
     "create":{
-        "__extends":{
-            "from":"attributes",
-            "__excludes":["id"]
+        "request":{
+            "__extends":{
+                "from":"attributes",
+                "__excludes":["id"]
+            }
+        },
+        "response":{
+            "__extends":{
+                "from":"attributes",
+                "__includes":["id"]
+            }
         }
     },
     "list":{
-        "__extends":{
-            "from":"attributes",
-            "__excludes":["password"]
+        "response":{
+            "__extends":{
+                "from":"attributes",
+                "__excludes":["password"]
+            }
         }
     },
     "get":{
-        "__extends":{
-            "from":"create",
-            "__excludes":[ "id"]
+        "request":{
+                "__extends":{
+                "from":"attributes",
+                "__includes":["id"]
+            }
+        },
+        "response":{
+            "__extends":{
+                "from":"attributes",
+                "__excludes":["id"]
+            }
         }
     }
 }
