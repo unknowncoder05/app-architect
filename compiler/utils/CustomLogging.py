@@ -1,4 +1,4 @@
-class CustomLogin(object):
+class CustomLogging(object):
     def error(msg:str):
         raise NameError(msg)
     def warning(msg:str):
