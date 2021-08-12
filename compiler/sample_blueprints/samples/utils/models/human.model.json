@@ -1,8 +1,8 @@
 {
+    "__description": "a human model",
     "__constructor":{
-        "__description": "a human model",
         "name":{"type":"str", "default":"name"},
-        "birth":{"type":"date", "default":"birth"},
+        "birth":{"type":"str", "default":"birth"},
         "sector":{"type":"str", "default":"sector"}
     },
     "attributes":{

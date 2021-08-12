@@ -9,7 +9,9 @@ MODELS_FIELD = "models"
 SPECIAL_FIELD_FLAG = "__"
 EXTENDS_FIELD = SPECIAL_FIELD_FLAG+"extends"
 
-
+def set_type(object, to_type):
+    # TODO: implement type serialization
+    return object
 def load_json_as_dict(file_name):
     with open(file_name, "r") as f:
         return json.load(f)
@@ -67,7 +69,7 @@ def cosntruct_replace(main_object, arg_replace, value):
         response_json[attribute_new_name] = attribute_new_value
     return response_json
 def cosntructor(json_dict, *, args = {}, object_route=""):
-    json_dict.pop(SPECIAL_FIELD_FLAG+"constructor")
+    constructor_dict = json_dict.pop(SPECIAL_FIELD_FLAG+"constructor")
     response_json = copy.deepcopy(json_dict)
     args_to_check = copy.deepcopy(args)
     args_to_check.pop(SPECIAL_FIELD_FLAG+"from")
@@ -75,8 +77,17 @@ def cosntructor(json_dict, *, args = {}, object_route=""):
         args_to_check.pop(SPECIAL_FIELD_FLAG+"excludes")
     if SPECIAL_FIELD_FLAG+"includes" in args_to_check:
         args_to_check.pop(SPECIAL_FIELD_FLAG+"includes")
-    for arg in args:
-        new_value = cosntruct_replace(response_json, SPECIAL_FIELD_FLAG+arg, args[arg])
+    for arg_to_check in args_to_check:
+        if arg_to_check not in constructor_dict:
+            CustomLogging.warning(f"error in constructor: invalid parameter {arg_to_check}")
+        else:
+            constructor_dict.pop(arg_to_check) # remove argument so we know it already was defined
+    for default_attribute in constructor_dict:
+        if default_attribute.startswith(SPECIAL_FIELD_FLAG):
+            continue
+        args_to_check[default_attribute] = set_type(constructor_dict[default_attribute]["default"], constructor_dict[default_attribute]["type"])
+    for arg in args_to_check:
+        new_value = cosntruct_replace(response_json, SPECIAL_FIELD_FLAG+arg, args_to_check[arg])
         response_json = new_value
     return response_json
 def special_flags_processing(json_dict, *, args = {}, base_folder=None, base_dict={}, object_route=""):

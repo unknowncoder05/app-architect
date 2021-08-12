@@ -1,7 +1,8 @@
 {
     "__constructor":{
         "user":{
-            "description":"user to be used"
+            "type":"str",
+            "description":"route to user to be used"
         }
     },
     "attributes":{

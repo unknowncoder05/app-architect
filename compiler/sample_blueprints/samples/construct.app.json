@@ -5,8 +5,7 @@
             "__extends":{
                 "__from":"utils.models.human",
                 "name":"nombre",
-                "birth":"nacimiento",
-                "sector":"sector"
+                "birth":"nacimiento"
             }
         }
     },
