@@ -1,9 +1,15 @@
 {
+    "__description": "a human model",
+    "__constructor":{
+        "name":{"type":"str", "default":"name"},
+        "birth":{"type":"str", "default":"birth"},
+        "sector":{"type":"str", "default":"sector"}
+    },
     "attributes":{
         "id": {"type":"id"},
-        "name":{"type":"str", "max":20, "required":true},
-        "email":{"type":"email", "max":20, "required":true},
-        "password":{"type":"password", "max":100, "required":false}
+        "__name":{"type":"str", "max":20, "required":true},
+        "__birth":{"type":"date", "max":20, "required":true},
+        "__sector":{"type":"str", "max":100, "required":true}
     },
     "create":{
         "request":{
@@ -22,21 +28,21 @@
     "list":{
         "response":{
             "__extends":{
-                "from":"attributes",
-                "__excludes":["password"]
+                "__from":"attributes",
+                "__includes":["__name"]
             }
         }
     },
     "get":{
         "request":{
                 "__extends":{
-                "from":"attributes",
+                "__from":"attributes",
                 "__includes":["id"]
             }
         },
         "response":{
             "__extends":{
-                "from":"attributes",
+                "__from":"attributes",
                 "__excludes":["id"]
             }
         }

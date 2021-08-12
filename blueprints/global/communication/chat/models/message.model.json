@@ -1,7 +1,8 @@
 {
     "__constructor":{
         "user":{
-            "description":"user to be used"
+            "type":"str",
+            "description":"route to user to be used"
         }
     },
     "attributes":{
@@ -13,18 +14,18 @@
     },
     "create":{
         "__extends":{
-            "from":"attributes",
+            "__from":"attributes",
             "__excludes":["id"]
         }
     },
     "list":{
         "__extends":{
-            "from":"attributes"
+            "__from":"attributes"
         }
     },
     "get":{
         "__extends":{
-            "from":"create",
+            "__from":"create",
             "__excludes":[ "id"]
         }
     }

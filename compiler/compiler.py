@@ -20,3 +20,4 @@ def main():
 main()
 # python .\compiler.py c "json.v1" ../blueprints/examples/facebook/main.app.json
 # python .\compiler.py c "json.v1" ./sample_blueprints/samples/import.app.json
+# python .\compiler.py c "json.v1" ./sample_blueprints/samples/construct.app.json

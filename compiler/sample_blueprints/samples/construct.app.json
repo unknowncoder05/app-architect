@@ -1,0 +1,15 @@
+{
+    "name": "construct",
+    "models": {
+        "human":{
+            "__extends":{
+                "__from":"utils.models.human",
+                "name":"nombre",
+                "birth":"nacimiento"
+            }
+        }
+    },
+    "services": {
+        "human":"utils.services.human"
+    }
+}

@@ -6,7 +6,7 @@
     },
     "response":{
         "__extends":{
-            "from":"request"
+            "__from":"request"
         },
         "total_count":{ "type":"int", "min":0},
         "page_count":{ "type":"int", "min":0},
