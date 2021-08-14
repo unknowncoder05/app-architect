@@ -1,14 +1,17 @@
 {
     "engine": "python3.8",
+    "__description": "what seams like a simple sum",
     "__constructor":{
-        "description": "what seams like a simple sum",
         "number_a":{"type":"str", "default":"number_a"},
         "number_b":{"type":"str", "default":"number_b"},
         "message":{"type":"str", "default":"adding {__number_a} to {__number_b}"}
     },
     "inputs":{
-        "__number_a":{"type":"str", "required":true},
-        "__number_b":{"type":"str", "required":true}
+        "__number_a":{"type":"int", "required":true},
+        "__number_b":{"type":"int", "required":true}
+    },
+    "outputs":{
+        "result":{"type":"int", "required":true}
     },
     "code": [
         {
@@ -19,12 +22,12 @@
         {
             "type": "variable",
             "variable_type": "str",
-            "name": "sum_result",
+            "name": "result",
             "equals": ["__number_a+number_b"]
         },
         {
             "type": "return",
-            "args": ["sum_result"]
+            "args": ["result"]
         }
     ]
 }

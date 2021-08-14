@@ -8,7 +8,7 @@
     "attributes":{
         "id": {"type":"id"},
         "__name":{"type":"str", "max":20, "required":true},
-        "__birth":{"type":"date", "max":20, "required":true},
+        "__birth":{"type":"date", "required":true},
         "__sector":{"type":"str", "max":100, "required":true}
     },
     "create":{

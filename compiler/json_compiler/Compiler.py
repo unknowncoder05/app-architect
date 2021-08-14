@@ -6,6 +6,7 @@ from utils.searcher import search_json
 from utils.CustomLogging import CustomLogging
 
 MODELS_FIELD = "models"
+SEVICES_FIELD = "services"
 SPECIAL_FIELD_FLAG = "__"
 EXTENDS_FIELD = SPECIAL_FIELD_FLAG+"extends"
 
@@ -23,7 +24,7 @@ def extends(json_dict, *, base_folder=None, base_dict={}, object_route=""):
         if extends_from[0] in base_dict:
             attr_build = special_flags_processing(base_dict[extends_from[0]], base_dict=base_dict, object_route = new_route)
         else:
-            CustomLogging.error(f"Attribute {extends_from[0]} not found \n{base_dict}")
+            CustomLogging.error(f"Attribute {extends_from[0]} not found extending {object_route}\n{base_dict}")
     else:
         attr_file_name = search_json(json_dict[SPECIAL_FIELD_FLAG+"extends"][SPECIAL_FIELD_FLAG+"from"], base_folder=base_folder)
         if not attr_file_name:
@@ -86,9 +87,13 @@ def cosntructor(json_dict, *, args = {}, object_route=""):
         if default_attribute.startswith(SPECIAL_FIELD_FLAG):
             continue
         args_to_check[default_attribute] = set_type(constructor_dict[default_attribute]["default"], constructor_dict[default_attribute]["type"])
-    for arg in args_to_check:
-        new_value = cosntruct_replace(response_json, SPECIAL_FIELD_FLAG+arg, args_to_check[arg])
-        response_json = new_value
+    updates = True
+    while updates: # Dangerous Loop
+        for arg in args_to_check:
+            new_value = cosntruct_replace(response_json, SPECIAL_FIELD_FLAG+arg, args_to_check[arg])
+            if new_value == response_json:
+                updates = False
+            response_json = new_value
     return response_json
 def special_flags_processing(json_dict, *, args = {}, base_folder=None, base_dict={}, object_route=""):
     if SPECIAL_FIELD_FLAG+"constructor" in json_dict:
@@ -112,27 +117,53 @@ class Compiler:
         self.main_file = main_file
         self.blueprint = load_json_as_dict(main_file)
 
-    def compile_models(self):
-        if MODELS_FIELD not in self.blueprint and EXTENDS_FIELD not in self.blueprint:
-            CustomLogging.error("models is not defined")
-        build = json_global_compile(self.blueprint, base_folder=self.main_folder)
-        for model in build["models"].copy():
+    def compile_models(self, build):
+        if MODELS_FIELD not in build:
+            CustomLogging.error(f"{MODELS_FIELD} field is not defined")
+        models = build[MODELS_FIELD]
+        for model in models.copy():
             model_file_name = self.main_file
-            if type(build["models"][model]) == str:
+            if type(models[model]) == str:
                 model_file_name = search_json(
-                    build["models"][model], base_folder=self.main_folder)
+                    models[model], base_folder=self.main_folder)
                 if not model_file_name:
-                    CustomLogging.error(build["models"][model], "path does not exists in")
+                    CustomLogging.error(models[model], "path does not exists in")
                     continue
                 model_json = load_json_as_dict(model_file_name)
-            elif type(build["models"][model]) == dict:
-                model_json = build["models"][model]
+            elif type(models[model]) == dict:
+                model_json = models[model]
             else:
                 CustomLogging.error(f"invalid model {model}")
             model_build = json_global_compile(model_json, base_folder = os.path.dirname(model_file_name), object_route=model)
-            build["models"][model] = model_build
-        pp = pprint.PrettyPrinter(indent=2)
-        pp.pprint(build)
+            models[model] = model_build
+        build[MODELS_FIELD] = models
+        return build
+    def compile_services(self, build):
+        if SEVICES_FIELD not in build:
+            CustomLogging.error(f"{SEVICES_FIELD} field is not defined")
+        services = build[SEVICES_FIELD]
+        for service in services.copy():
+            service_file_name = self.main_file
+            if type(services[service]) == str:
+                service_file_name = search_json(
+                    services[service], base_folder=self.main_folder)
+                if not service_file_name:
+                    CustomLogging.error(services[service], "path does not exists in")
+                    continue
+                service_json = load_json_as_dict(service_file_name)
+            elif type(services[service]) == dict:
+                service_json = services[service]
+            else:
+                CustomLogging.error(f"invalid service {service}")
+            service_build = json_global_compile(service_json, base_folder = os.path.dirname(service_file_name), object_route=service)
+            services[service] = service_build
+        build[SEVICES_FIELD] = services
+        return build
 
     def compile(self):
-        self.compile_models()
+        build = json_global_compile(self.blueprint, base_folder=self.main_folder)
+        build = self.compile_models(build)
+        build = self.compile_services(build)
+        #print(build)
+        pp = pprint.PrettyPrinter(indent=2)
+        pp.pprint(build)
