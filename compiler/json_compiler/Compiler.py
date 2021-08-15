@@ -98,7 +98,13 @@ def cosntructor(json_dict, *, args = {}, object_route=""):
     for default_attribute in constructor_dict:
         if default_attribute.startswith(SPECIAL_FIELD_FLAG):
             continue
-        args_to_check[default_attribute] = set_type(constructor_dict[default_attribute]["default"], constructor_dict[default_attribute]["type"])
+        if not constructor_dict[default_attribute].get("required", False):
+            if "default" not in constructor_dict[default_attribute]:
+                CustomLogging.error(f"{object_route} non required input should have default value")
+            args_to_check[default_attribute] = set_type(constructor_dict[default_attribute]["default"], constructor_dict[default_attribute]["type"])
+        else:
+            if default_attribute not in args_to_check:
+                CustomLogging.error(f"{object_route} {default_attribute} is required")
     updates = True
     while updates: # Dangerous Loop
         for arg in args_to_check:
@@ -109,7 +115,7 @@ def cosntructor(json_dict, *, args = {}, object_route=""):
     return response_json
 def special_flags_processing(json_dict, *, args = {}, base_folder=None, base_dict={}, object_route=""):
     if SPECIAL_FIELD_FLAG+"constructor" in json_dict:
-        json_dict = cosntructor(json_dict, args=args)
+        json_dict = cosntructor(json_dict, args=args, object_route=object_route)
         base_dict = copy.deepcopy(json_dict)
     if SPECIAL_FIELD_FLAG+"extends" in json_dict:
         json_dict = extends(json_dict, base_folder=base_folder, base_dict=base_dict, object_route=object_route)
@@ -124,6 +130,17 @@ def special_flags_processing(json_dict, *, args = {}, base_folder=None, base_dic
             )
     return copy.deepcopy(json_dict)
 
+def get_object(route, base_folder):
+    attr_file_name=search_json(route, base_folder=base_folder)
+    if not attr_file_name:
+        CustomLogging.error(f"{route} path does not exists")
+    attr_json = load_json_as_dict(attr_file_name)
+    attr_build = json_global_compile(
+        attr_json,
+        base_folder = os.path.dirname(attr_file_name),
+        object_route=route
+    )
+    return attr_build
 def json_global_compile(json_dict, *, args = {}, base_folder=None, base_dict={}, object_route= ""):
     data = special_flags_processing(json_dict, args=args, base_folder=base_folder, base_dict=json_dict, object_route=object_route)
     return data
