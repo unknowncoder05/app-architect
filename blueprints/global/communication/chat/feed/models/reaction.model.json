@@ -1,8 +1,10 @@
 {
     "__constructor":{
         "user":{
-            "description":"user to be used"
-        }
+                "description":"user to be used",
+                "type":"str",
+                "default":"global.communication.chat.models.conversation"
+            }
     },
     "attributes":{
         "id": {"type":"id"},

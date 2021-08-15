@@ -1,8 +1,9 @@
 {
     "__constructor":{
         "user":{
-            "description":"user model to be used",
-            "default":"global.auth.user.models.user"
+            "description":"conversation model to be used",
+            "type": "str",
+            "default":"global.communication.chat.models.conversation"
         }
     },
     "attributes":{
@@ -23,8 +24,8 @@
     },
     "get":{
         "__extends":{
-            "__from":"create",
-            "__excludes":[ "id"]
+            "__from":"attributes",
+            "__excludes":["id"]
         }
     }
 }

@@ -1,7 +1,8 @@
 from json_compiler.Compiler import Compiler as json_compiler
+from django_compiler.Compiler import Compiler as django_compiler
 import sys
 COMPILERS = {
-    "django-postgres.v1": "under development",
+    "django-postgres.v1": django_compiler,
     "flask-mongo.v1": "under development",
     "nodejs-mongo.v1": "under development",
     "json.v1": json_compiler
@@ -22,3 +23,6 @@ main()
 # python .\compiler.py c "json.v1" ./sample_blueprints/samples/import.app.json
 # python .\compiler.py c "json.v1" ./sample_blueprints/samples/construct.app.json
 # python .\compiler.py c "json.v1" ../blueprints/examples/calculator/v2/main.app.json
+
+# python .\compiler.py c "django-postgres.v1" ../blueprints/examples/facebook/main.app.json
+

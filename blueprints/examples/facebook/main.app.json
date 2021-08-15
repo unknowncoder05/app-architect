@@ -6,7 +6,7 @@
         "message":"global.communication.chat.feed.models.message"
     },
     "services": {
-        "user":"global.utils.services.user",
+        "user":"global.utils.auth.user.services.user",
         "conversation":"global.communication.chat.services.conversation",
         "message":"global.communication.chat.services.message"
     }

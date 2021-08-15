@@ -1,0 +1,19 @@
+{
+    "engine": "python3.8/django3.2",
+    "__description": "template for django models",
+    "__constructor":{
+        "model_name":{"type":"str", "default":"DefaultModel"},
+        "atributes":{"type":"dict"}
+    },
+    "import":{
+       "models":{"from":"django.db"}
+    },
+    "code": [
+        {
+            "type": "class",
+            "name": "__model_name",
+            "extends": ["models"],
+            "attributes":"__atributes"
+        }
+    ]
+}

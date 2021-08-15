@@ -2,6 +2,7 @@
     "__constructor":{
         "conversation":{
             "description":"conversation model to be used",
+            "type": "str",
             "default":"global.communication.chat.models.conversation"
         }
     },

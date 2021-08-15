@@ -1,15 +1,14 @@
 import json
 import os
-import pprint
 import copy
 from utils.searcher import search_json
 from utils.CustomLogging import CustomLogging
+from utils.flags import *
 
-MODELS_FIELD = "models"
-SEVICES_FIELD = "services"
-SPECIAL_FIELD_FLAG = "__"
-EXTENDS_FIELD = SPECIAL_FIELD_FLAG+"extends"
-
+def object_route_join(old, new):
+    if old == "":
+        return new
+    return ".".join(old.split(".")+[new])
 def set_type(object, to_type):
     # TODO: implement type serialization
     return object
@@ -20,7 +19,7 @@ def extends(json_dict, *, base_folder=None, base_dict={}, object_route=""):
     extends_from = json_dict[SPECIAL_FIELD_FLAG+"extends"][SPECIAL_FIELD_FLAG+"from"].split(".")
     attr_build = {}
     if len(extends_from) == 1:
-        new_route = ".".join(object_route.split(".")+[extends_from[0]])
+        new_route = object_route_join(object_route,extends_from[0])
         if extends_from[0] in base_dict:
             attr_build = special_flags_processing(base_dict[extends_from[0]], base_dict=base_dict, object_route = new_route)
         else:
@@ -52,28 +51,41 @@ def extends(json_dict, *, base_folder=None, base_dict={}, object_route=""):
             if exclude in attr_build:
                 attr_build.pop(exclude)
             else:
-                CustomLogging.warning(f"exclude error: attribute {exclude} not in {json_dict[SPECIAL_FIELD_FLAG+'extends'][SPECIAL_FIELD_FLAG+'from']}")
+                CustomLogging.warning(f"exclude error {object_route}: attribute {exclude} not in {json_dict[SPECIAL_FIELD_FLAG+'extends'][SPECIAL_FIELD_FLAG+'from']}")
     json_dict.update(attr_build)
     json_dict.pop(SPECIAL_FIELD_FLAG+"extends")
     return json_dict
-def cosntruct_replace(main_object, arg_replace, value):
+def cosntruct_replace(main_object, arg_replace, value , *, object_route=""):
     if type(main_object) == str:
-        return main_object.replace(arg_replace, value)
+        if(type(value) == str):
+            return main_object.replace(arg_replace, value)
+        if(arg_replace == main_object):
+            return value
+        return main_object
     response_json = {}
     for attribute in main_object:
-        attribute_new_name = attribute.replace(arg_replace, value)
+        if type(value) == str:
+            attribute_new_name =  attribute.replace(arg_replace, value)  
+        else:
+            if arg_replace in attribute:
+                CustomLogging.warning(f"{attribute} can not be constructed since is an attribute name and the value of {arg_replace} is not a string")
+            attribute_new_name = attribute
         attribute_new_value = main_object[attribute]
+        current_object_route = object_route_join(object_route,attribute)
         if type(attribute_new_value) == dict:
-            attribute_new_value = cosntruct_replace(attribute_new_value, arg_replace, value)
+            attribute_new_value = cosntruct_replace(attribute_new_value, arg_replace, value, object_route=current_object_route)
         elif type(attribute_new_value) == list:
-            attribute_new_value = [ cosntruct_replace(element, arg_replace, value) for element in attribute_new_value ]
+            attribute_new_value = [ cosntruct_replace(element, arg_replace, value , object_route=object_route_join(current_object_route, str(i))) for i, element in enumerate(attribute_new_value) ]
+        elif type(attribute_new_value) == str:
+            attribute_new_value = cosntruct_replace(attribute_new_value, arg_replace, value, object_route=current_object_route)
         response_json[attribute_new_name] = attribute_new_value
     return response_json
 def cosntructor(json_dict, *, args = {}, object_route=""):
     constructor_dict = json_dict.pop(SPECIAL_FIELD_FLAG+"constructor")
     response_json = copy.deepcopy(json_dict)
     args_to_check = copy.deepcopy(args)
-    args_to_check.pop(SPECIAL_FIELD_FLAG+"from")
+    if SPECIAL_FIELD_FLAG+"from" in args_to_check:
+        args_to_check.pop(SPECIAL_FIELD_FLAG+"from")
     if SPECIAL_FIELD_FLAG+"excludes" in args_to_check:
         args_to_check.pop(SPECIAL_FIELD_FLAG+"excludes")
     if SPECIAL_FIELD_FLAG+"includes" in args_to_check:
@@ -90,7 +102,7 @@ def cosntructor(json_dict, *, args = {}, object_route=""):
     updates = True
     while updates: # Dangerous Loop
         for arg in args_to_check:
-            new_value = cosntruct_replace(response_json, SPECIAL_FIELD_FLAG+arg, args_to_check[arg])
+            new_value = cosntruct_replace(response_json, SPECIAL_FIELD_FLAG+arg, args_to_check[arg], object_route=object_route)
             if new_value == response_json:
                 updates = False
             response_json = new_value
@@ -103,7 +115,13 @@ def special_flags_processing(json_dict, *, args = {}, base_folder=None, base_dic
         json_dict = extends(json_dict, base_folder=base_folder, base_dict=base_dict, object_route=object_route)
     for attribute in json_dict:
         if type(json_dict[attribute]) == dict:
-            json_dict[attribute] = special_flags_processing(json_dict[attribute], args=args, base_folder=base_folder, base_dict=base_dict, object_route=f"{object_route}.{attribute}")
+            json_dict[attribute] = special_flags_processing(
+                json_dict[attribute],
+                args=args,
+                base_folder=base_folder,
+                base_dict=base_dict,
+                object_route=object_route_join(object_route, attribute)
+            )
     return copy.deepcopy(json_dict)
 
 def json_global_compile(json_dict, *, args = {}, base_folder=None, base_dict={}, object_route= ""):
@@ -165,5 +183,4 @@ class Compiler:
         build = self.compile_models(build)
         build = self.compile_services(build)
         #print(build)
-        pp = pprint.PrettyPrinter(indent=2)
-        pp.pprint(build)
+        return build

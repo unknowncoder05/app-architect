@@ -1,8 +1,9 @@
 {
     "__constructor":{
         "user":{
+            "description":"route to user to be used",
             "type":"str",
-            "description":"route to user to be used"
+            "default":"global.communication.chat.models.conversation"
         }
     },
     "attributes":{
@@ -25,7 +26,7 @@
     },
     "get":{
         "__extends":{
-            "__from":"create",
+            "__from":"attributes",
             "__excludes":[ "id"]
         }
     }

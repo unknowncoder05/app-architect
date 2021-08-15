@@ -22,7 +22,7 @@
     "list":{
         "response":{
             "__extends":{
-                "from":"attributes",
+                "__from":"attributes",
                 "__excludes":["password"]
             }
         }
@@ -30,13 +30,13 @@
     "get":{
         "request":{
                 "__extends":{
-                "from":"attributes",
+                "__from":"attributes",
                 "__includes":["id"]
             }
         },
         "response":{
             "__extends":{
-                "from":"attributes",
+                "__from":"attributes",
                 "__excludes":["id"]
             }
         }
