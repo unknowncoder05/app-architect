@@ -1,5 +1,6 @@
 import os
 import json
+from pathlib import Path
 
 from json_compiler.Compiler import Compiler as json_compiler, special_flags_processing, load_json_as_dict, object_route_join
 from utils.CustomLogging import CustomLogging
@@ -75,7 +76,9 @@ def compile_model(model_name:str, model_dict:dict, model_names:list, *, base_fol
         "atributes": atributes,
         "desc":"__model_name model class" # recursive constructor
     }
-    model_template = load_json_as_dict("./django_compiler/templates/model.code.json")
+    dir = Path(os.path.dirname(__file__))
+    model_path = dir / "templates" / "model.code.json"
+    model_template = load_json_as_dict(model_path)
     processed = special_flags_processing(model_template, args=args, base_folder=base_folder, base_dict=base_dict, object_route=object_route)
     return processed
 
@@ -84,10 +87,10 @@ class Compiler:
     blueprint: dict = {}
 
     def __init__(self, main_file) -> None:
-        self.main_folder = os.path.dirname(main_file)
-        self.main_file = main_file
+        self.main_folder = Path(os.path.dirname(main_file))
+        self.main_file = Path(main_file)
 
-        jcompiler = json_compiler(main_file)
+        jcompiler = json_compiler(self.main_file)
         self.blueprint = jcompiler.compile()
 
     def compile_models(self, build):
@@ -113,6 +116,4 @@ class Compiler:
         build = self.compile_models(self.blueprint)
         #build = self.compile_services(build)
         #print(build)
-        with open(f"{self.blueprint['name']}.build.json", "w") as f:
-            json.dump(build, f, indent=4)
         return build

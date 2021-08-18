@@ -1,6 +1,7 @@
 import json
 import os
 import copy
+from pathlib import Path
 from utils.searcher import search_json
 from utils.CustomLogging import CustomLogging
 from utils.flags import *
@@ -148,9 +149,9 @@ class Compiler:
     blueprint: dict = {}
 
     def __init__(self, main_file) -> None:
-        self.main_folder = os.path.dirname(main_file)
-        self.main_file = main_file
-        self.blueprint = load_json_as_dict(main_file)
+        self.main_folder = Path(os.path.dirname(main_file))
+        self.main_file = Path(main_file)
+        self.blueprint = load_json_as_dict(self.main_file)
 
     def compile_models(self, build):
         if MODELS_FIELD not in build:
