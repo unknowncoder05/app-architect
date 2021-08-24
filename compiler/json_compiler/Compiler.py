@@ -17,7 +17,7 @@ def load_json_as_dict(file_name):
     with open(file_name, "r") as f:
         return json.load(f)
 def extends(json_dict, *, base_folder=None, base_dict={}, object_route=""):
-    extends_from = json_dict[SPECIAL_FIELD_FLAG+"extends"][SPECIAL_FIELD_FLAG+"from"].split(".")
+    extends_from = json_dict[FLAG_EXTENDS][FLAG_FROM].split(".")
     attr_build = {}
     if len(extends_from) == 1:
         new_route = object_route_join(object_route,extends_from[0])
@@ -26,35 +26,35 @@ def extends(json_dict, *, base_folder=None, base_dict={}, object_route=""):
         else:
             CustomLogging.error(f"Attribute {extends_from[0]} not found extending {object_route}\n{base_dict}")
     else:
-        attr_file_name = search_json(json_dict[SPECIAL_FIELD_FLAG+"extends"][SPECIAL_FIELD_FLAG+"from"], base_folder=base_folder)
+        attr_file_name = search_json(json_dict[FLAG_EXTENDS][FLAG_FROM], base_folder=base_folder)
         if not attr_file_name:
-            CustomLogging.error(f"{json_dict[SPECIAL_FIELD_FLAG+'extends'][SPECIAL_FIELD_FLAG+'from']} path does not exists in")
+            CustomLogging.error(f"{json_dict[FLAG_EXTENDS][FLAG_FROM]} path does not exists in")
         attr_json = load_json_as_dict(attr_file_name)
         attr_build = json_global_compile(
             attr_json,
-            args = json_dict[SPECIAL_FIELD_FLAG+"extends"],
+            args = json_dict[FLAG_EXTENDS],
             base_folder = os.path.dirname(attr_file_name),
-            object_route=json_dict[SPECIAL_FIELD_FLAG+"extends"][SPECIAL_FIELD_FLAG+"from"]
+            object_route=json_dict[FLAG_EXTENDS][FLAG_FROM]
         )
-    is_excluding = SPECIAL_FIELD_FLAG+"excludes" in json_dict[SPECIAL_FIELD_FLAG+"extends"]
-    is_including = SPECIAL_FIELD_FLAG+"includes" in json_dict[SPECIAL_FIELD_FLAG+"extends"]
+    is_excluding = FLAG_EXCLUDES in json_dict[FLAG_EXTENDS]
+    is_including = FLAG_INCLUDES in json_dict[FLAG_EXTENDS]
     if is_including and is_excluding:
         CustomLogging.error("can not use excludes and includes in a same block")
     if is_including:
         new_attr_build = {}
-        for include in json_dict[SPECIAL_FIELD_FLAG+"extends"][SPECIAL_FIELD_FLAG+"includes"]:
+        for include in json_dict[FLAG_EXTENDS][FLAG_INCLUDES]:
             if include not in attr_build:
                 CustomLogging.error(f"{object_route} include error: attribute {include} not in {json_dict[SPECIAL_FIELD_FLAG+'extends'][SPECIAL_FIELD_FLAG+'from']}")
             new_attr_build[include] = attr_build[include]
         attr_build = new_attr_build
     if is_excluding:
-        for exclude in json_dict[SPECIAL_FIELD_FLAG+"extends"][SPECIAL_FIELD_FLAG+"excludes"]:
+        for exclude in json_dict[FLAG_EXTENDS][FLAG_EXCLUDES]:
             if exclude in attr_build:
                 attr_build.pop(exclude)
             else:
                 CustomLogging.warning(f"exclude error {object_route}: attribute {exclude} not in {json_dict[SPECIAL_FIELD_FLAG+'extends'][SPECIAL_FIELD_FLAG+'from']}")
     json_dict.update(attr_build)
-    json_dict.pop(SPECIAL_FIELD_FLAG+"extends")
+    json_dict.pop(FLAG_EXTENDS)
     return json_dict
 def cosntruct_replace(main_object, arg_replace, value , *, object_route=""):
     if type(main_object) == str:
@@ -85,12 +85,12 @@ def cosntructor(json_dict, *, args = {}, object_route=""):
     constructor_dict = json_dict.pop(SPECIAL_FIELD_FLAG+"constructor")
     response_json = copy.deepcopy(json_dict)
     args_to_check = copy.deepcopy(args)
-    if SPECIAL_FIELD_FLAG+"from" in args_to_check:
-        args_to_check.pop(SPECIAL_FIELD_FLAG+"from")
-    if SPECIAL_FIELD_FLAG+"excludes" in args_to_check:
-        args_to_check.pop(SPECIAL_FIELD_FLAG+"excludes")
-    if SPECIAL_FIELD_FLAG+"includes" in args_to_check:
-        args_to_check.pop(SPECIAL_FIELD_FLAG+"includes")
+    if FLAG_FROM in args_to_check:
+        args_to_check.pop(FLAG_FROM)
+    if FLAG_EXCLUDES in args_to_check:
+        args_to_check.pop(FLAG_EXCLUDES)
+    if FLAG_INCLUDES in args_to_check:
+        args_to_check.pop(FLAG_INCLUDES)
     for arg_to_check in args_to_check:
         if arg_to_check not in constructor_dict:
             CustomLogging.warning(f"error in constructor: invalid parameter {arg_to_check}")
@@ -118,7 +118,7 @@ def special_flags_processing(json_dict, *, args = {}, base_folder=None, base_dic
     if SPECIAL_FIELD_FLAG+"constructor" in json_dict:
         json_dict = cosntructor(json_dict, args=args, object_route=object_route)
         base_dict = copy.deepcopy(json_dict)
-    if SPECIAL_FIELD_FLAG+"extends" in json_dict:
+    if FLAG_EXTENDS in json_dict:
         json_dict = extends(json_dict, base_folder=base_folder, base_dict=base_dict, object_route=object_route)
     for attribute in json_dict:
         if type(json_dict[attribute]) == dict:

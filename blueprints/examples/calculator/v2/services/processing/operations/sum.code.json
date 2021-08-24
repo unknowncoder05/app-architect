@@ -4,8 +4,12 @@
     "__constructor":{
         "number_a":{"type":"str", "default":"number_a"},
         "number_b":{"type":"str", "default":"number_b"},
-        "message":{"type":"str", "default":"adding {__number_a} to {__number_b}"}
+        "message":{"type":"str", "default":"adding {__number_a} to {__number_b}"},
+        "function_name":{"type":"str", "default":"sum"}
     },
+    "type": "function",
+    "name": "__function_name",
+    "args": ["f\"__message\""],
     "inputs":{
         "__number_a":{"type":"int", "required":true},
         "__number_b":{"type":"int", "required":true}
@@ -15,15 +19,10 @@
     },
     "code": [
         {
-            "type": "function",
-            "name": "print",
-            "args": ["f\"__message\""]
-        },
-        {
             "type": "variable",
             "variable_type": "str",
             "name": "result",
-            "equals": ["__number_a+number_b"]
+            "equals": "__number_a+number_b"
         },
         {
             "type": "return",

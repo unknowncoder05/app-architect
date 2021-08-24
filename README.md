@@ -1,5 +1,8 @@
 # App architect
 
+```sh
+python .\compiler\compiler.py c "django.json.v1" ./blueprints/examples/facebook/main.app.json ./compiler/build
+```
 Design your application in a json like structure, this way the resulting project is going to be easily understood both by human and by machine.
 
 This json like structure will let you:
