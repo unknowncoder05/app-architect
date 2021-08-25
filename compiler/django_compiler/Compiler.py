@@ -86,7 +86,7 @@ def compile_model(model_name:str, model_dict:dict, model_names:list, *, base_fol
 class Compiler:
     blueprint: dict = {}
 
-    def __init__(self, main_file) -> None:
+    def __init__(self, *, main_file) -> None:
         self.main_folder = Path(os.path.dirname(main_file))
         self.main_file = Path(main_file)
 
@@ -112,7 +112,7 @@ class Compiler:
         build[SEVICES_FIELD] = services
         return build
 
-    def compile(self):
+    def compile(self) -> dict:
         build = self.compile_models(self.blueprint)
         #build = self.compile_services(build)
         #print(build)

@@ -148,7 +148,7 @@ def json_global_compile(json_dict, *, args = {}, base_folder=None, base_dict={},
 class Compiler:
     blueprint: dict = {}
 
-    def __init__(self, main_file) -> None:
+    def __init__(self, *, main_file) -> None:
         self.main_folder = Path(os.path.dirname(main_file))
         self.main_file = Path(main_file)
         self.blueprint = load_json_as_dict(self.main_file)
@@ -196,7 +196,7 @@ class Compiler:
         build[SEVICES_FIELD] = services
         return build
 
-    def compile(self):
+    def compile(self) -> dict:
         build = json_global_compile(self.blueprint, base_folder=self.main_folder)
         build = self.compile_models(build)
         build = self.compile_services(build)
