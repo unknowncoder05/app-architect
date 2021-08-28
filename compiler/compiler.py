@@ -14,7 +14,8 @@ COMPILERS = { # "framework.language.version: compiler"
 def compile(compiler_name, project_name):
     compiler = COMPILERS[compiler_name](main_file=project_name)
     compiled_project = compiler.compile()
-    with open(f"./{sys.argv[4]}/{compiled_project.get('name', 'project')}.build.json", "w") as f:
+    print(compiled_project)
+    with open(f"./{sys.argv[4]}.build.json", "w") as f:
         json.dump(compiled_project, f, indent=4)
 OPTIONS = {
     "compile": compile,
@@ -35,5 +36,5 @@ main()
 # python .\compiler.py c "json.v1" ../blueprints/examples/calculator/v2/main.app.json build
 
 # python .\compiler.py c "django.json.v1" ../blueprints/examples/facebook/main.app.json build
-# python .\compiler.py c "python.json.v1" ../blueprints/examples/calculator/v2/services/processing/operations/sum.code.json build
+# python .\compiler.py c "python.json.v1" ../blueprints/examples/calculator/v2/services/processing/operations/sum.code.json build/build
 

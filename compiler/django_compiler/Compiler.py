@@ -73,7 +73,7 @@ def compile_model(model_name:str, model_dict:dict, model_names:list, *, base_fol
             atributes[field_name] = compiled_field
     args = {
         "model_name":model_name.title(),
-        "atributes": atributes,
+        "args": atributes,
         "desc":"__model_name model class" # recursive constructor
     }
     dir = Path(os.path.dirname(__file__))

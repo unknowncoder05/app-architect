@@ -9,8 +9,7 @@
     },
     "type": "function",
     "name": "__function_name",
-    "args": ["f\"__message\""],
-    "inputs":{
+    "args":{
         "__number_a":{"type":"int", "required":true},
         "__number_b":{"type":"int", "required":true}
     },
