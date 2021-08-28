@@ -3,5 +3,7 @@ class CustomLogging(object):
         print("LOG:",msg)
     def error(msg:str):
         raise NameError(msg)
+    def critical(msg:str):
+        raise NameError(msg)
     def warning(msg:str):
         print("WARNING:",msg)

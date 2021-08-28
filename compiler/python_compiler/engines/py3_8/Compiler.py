@@ -3,5 +3,5 @@ from .get_fragment_class import get_fragment_class
 
 
 def compile(blueprint:dict)->str:
-    build = get_fragment_class(blueprint)
+    build = get_fragment_class(blueprint, compile)
     return build.compile()

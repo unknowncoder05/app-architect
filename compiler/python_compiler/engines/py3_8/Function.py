@@ -34,8 +34,8 @@ class Function(Fragment):
     args:dict
     kwargs:dict
     outputs:dict
-    def __init__(self, blueprint) -> None:
-        super().__init__(blueprint)
+    def __init__(self, blueprint, *args, **kwargs) -> None:
+        super().__init__( blueprint, *args, **kwargs)
         self.name = get_function_name(blueprint)
         self.args = get_function_args(blueprint)
         self.kwargs = get_function_kwargs(blueprint)
@@ -44,11 +44,13 @@ class Function(Fragment):
     def inputs_compile(self) -> str:
         inputs_build = ""
         if self.args:
-            function_args = FunctionArgs(self.args)
+            function_args = FunctionArgs(self.args, compile=self.general_compile)
             inputs_build += function_args.compile()
         
         if self.kwargs:
-            function_kwargs = FunctionArgs(self.kwargs)
+            function_kwargs = FunctionArgs(self.kwargs, compile=self.general_compile)
+            if self.args:
+                inputs_build += ","
             inputs_build += f" *, {function_kwargs.compile()}"
         return inputs_build
     def outputs_compile(self) -> str:
@@ -56,12 +58,12 @@ class Function(Fragment):
         if len(self.outputs) == 1:
             if not (arg_type_name := self.outputs[list(self.outputs)[0]].get(ATTRIBUTE_TYPE)): # TODO: Temporal Outoput test
                 arg_type_name = ANY
-            outputs_build += f" -> {get_python_type_str(arg_type_name)} "
+            outputs_build += f"->{get_python_type_str(arg_type_name)}"
         return outputs_build
     def code_lines_compile(self) -> list:
         code_build_lines = []
         for line in self.code:
-            code_build_lines.append("\t"+line["type"])
+            code_build_lines.append(TAB+self.general_compile(line))
         return code_build_lines
     def compile(self)->str:
         fragment_lines = []

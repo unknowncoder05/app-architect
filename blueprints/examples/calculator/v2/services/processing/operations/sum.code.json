@@ -13,6 +13,9 @@
         "__number_a":{"type":"int", "required":true},
         "__number_b":{"type":"int", "required":true}
     },
+    "kwargs":{
+        "debug":{"type":"bool", "default":false}
+    },
     "outputs":{
         "result":{"type":"int", "required":true}
     },
@@ -21,7 +24,17 @@
             "type": "variable",
             "variable_type": "str",
             "name": "result",
-            "equals": "__number_a+number_b"
+            "expression": "__number_a+number_b"
+        },
+        {
+            "type": "conditional",
+            "condition": "debug",
+            "code": [
+                {
+                    "type": "function_call",
+                    "args": ["result"]
+                }
+            ]
         },
         {
             "type": "return",
