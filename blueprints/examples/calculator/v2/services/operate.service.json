@@ -2,12 +2,11 @@
     "endpoints": {
         "sum":{
             "request":{"a":{"type":"int"}, "b":{"type":"int"}},
-            "response":{"a":{"type":"int"}, "b":{"type":"int"}},
+            "response":{"result":{"type":"int"}},
             "processing":{
-                "from": "processing.operations.sum",
-                "number_a": "a",
-                "number_b": "b",
-                "message": "calculating sum"
+                "__extends":{
+                    "__from": "processing.operations.sum"
+                }
             }
         }
     }

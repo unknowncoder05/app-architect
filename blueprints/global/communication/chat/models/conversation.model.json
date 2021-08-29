@@ -2,7 +2,7 @@
     "__constructor":{
         "user":{
             "description":"user model to be used",
-            "default":"global.auth.user.models.user"
+            "type":"str"
         }
     },
     "attributes":{
@@ -23,8 +23,8 @@
     },
     "get":{
         "__extends":{
-            "__from":"create",
-            "__excludes":[ "id"]
+            "__from":"attributes",
+            "__excludes":["id"]
         }
     }
 }

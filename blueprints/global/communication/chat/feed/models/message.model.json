@@ -1,13 +1,15 @@
 {
     "__constructor":{
         "user":{
-            "description":"user to be used"
-        }
+                "description":"user model to be used",
+                "type":"str"
+            }
+    },
+    "__extends":{
+        "__from":"global.communication.chat.models.message",
+        "user":"__user"
     },
     "attributes":{
         "feed":{"type":"feed", "required":true, "user":"__user"}
-    },
-    "__extends":{
-        "__from":"global.communication.chat.models.message"
     }
 }

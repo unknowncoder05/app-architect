@@ -1,8 +1,9 @@
 {
     "__constructor":{
         "user":{
-            "description":"user to be used"
-        }
+                "description":"user model to be used",
+                "type":"str"
+            }
     },
     "attributes":{
         "id": {"type":"id"},
