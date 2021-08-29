@@ -1,8 +1,33 @@
 # App architect
 
+### Python Compiler
+There is no faster way for understanding than trying it yourself.
+you can execute the next command in the root of the project (this folder) and a simple code wil be generated.
 ```sh
-python .\compiler\compiler.py c "django.json.v1" ./blueprints/examples/facebook/main.app.json ./compiler/build
+python .\compiler\compiler.py c "python.json.v1" ./blueprints/examples/calculator/v2/services/processing/operations/sum.code.json code.py
 ```
+
+You can check the base blueprint for this project in the route examples/calculator/v2/services/processing/operations/sum.code.json
+
+```py
+def sum(number_a:int, number_b:int, *, debug:bool=False)->int:
+        result:str = number_a+number_b
+        if debug:
+                print(result)
+        return result
+```
+This is the expected answer, a simple function with all that we specified in the code.json file and ready to be used.
+
+#### What is so special about this?
+This is a basic format for you to generate code in any language, in any framework as long as the correct compiler is available.
+
+### Current roadmap for this project
+
+- Finish the basic Python compiler
+- Add tests
+- Work in the JS Express compiler
+- Create a UI from where to Edit code and generate the proper code.json, then you can choose from your saved snippets or those that other people had made public
+### App Compiler
 Design your application in a json like structure, this way the resulting project is going to be easily understood both by human and by machine.
 
 This json like structure will let you:

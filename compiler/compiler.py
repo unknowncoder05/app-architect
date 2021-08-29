@@ -15,8 +15,11 @@ def compile(compiler_name, project_name):
     compiler = COMPILERS[compiler_name](main_file=project_name)
     compiled_project = compiler.compile()
     print(compiled_project)
-    with open(f"./{sys.argv[4]}.build.json", "w") as f:
+    # TODO: propper file extension and format saving
+    '''
+    with open(f"./{sys.argv[4]}", "w") as f:
         json.dump(compiled_project, f, indent=4)
+    '''
 OPTIONS = {
     "compile": compile,
     "c": compile
