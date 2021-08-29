@@ -1,0 +1,27 @@
+{
+    "engine": "python3.8",
+    "__description": "basic chat app",
+    "__constructor":{
+        "user_model":{"type":"str", "default":"User"},
+        "class_name":{"type":"str", "default":"ChatController"}
+    },
+    "type": "class",
+    "name": "__class_name",
+    "methods":{
+        "__init__":{
+            "args":{}
+        },
+        "CreateConversation":{
+            
+        },
+        "SendMessage":{
+            
+        },
+        "ListConversations":{
+            
+        },
+        "ListMessages":{
+            
+        }
+    }
+}

@@ -86,9 +86,10 @@ def compile_model(model_name:str, model_dict:dict, model_names:list, *, base_fol
 class Compiler:
     blueprint: dict = {}
 
-    def __init__(self, *, main_file) -> None:
+    def __init__(self, *, main_file, save_file) -> None:
         self.main_folder = Path(os.path.dirname(main_file))
         self.main_file = Path(main_file)
+        self.save_file = Path(save_file)
 
         jcompiler = json_compiler(self.main_file)
         self.blueprint = jcompiler.compile()

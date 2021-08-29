@@ -1,0 +1,82 @@
+{
+    "engine": "python3.8",
+    "__description": "basic chat service",
+    "__constructor":{
+        "user_model":{"type":"str", "default":"User"},
+        "class_name":{"type":"str", "default":"ChatService"}
+    },
+    "type": "class",
+    "name": "__class_name",
+    "methods":{
+        "__init__":{
+            "args":{
+                "repository":{"required":true}
+            }
+        },
+        "CreateMessage":{
+            "args":{
+                "message_object":{"type":"dict", "required":true}
+            },
+            "kwargs":{
+                "debug":{"type":"bool", "default":false}
+            }
+        },
+        "ListMessages":{
+            "args":{
+                "page":{"type":"int", "required":true},
+                "page_size":{"type":"int", "default":10},
+                "user_id":{"default":10}
+            },
+            "kwargs":{
+                "debug":{"type":"bool", "default":false}
+            },
+            "outputs":{
+                "items":{"type":"list"},
+                "count":{"type":"int"}
+            },
+            "code":[
+                {
+                    "type":"variable",
+                    "name":"request",
+                    "variable_type":"dict",
+                    "expression":"{'page_size':page_size, 'page':page, 'user_id', user_id}"
+                },
+                {
+                    "type":"variable",
+                    "name":"repository_response",
+                    "expression":"self.repository.list(request)"
+                },
+                {
+                    "type":"variable",
+                    "name":"data",
+                    "expression":"repository_response.get('data',{})"
+                },
+                {
+                    "type":"variable",
+                    "name":"response",
+                    "expression":"{'items':data, 'count':len(data)}"
+                },
+                {
+                    "type":"return",
+                    "args":["response"]
+                }
+            ]
+        },
+        "DeleteMessage":{
+            "code":[
+                {
+                    "type":"return",
+                    "args":[]
+                }
+            ]
+        },
+        "UpdateMessage":{
+            "code":[
+                {
+                    "type":"return",
+                    "args":[]
+                }
+            ]
+        }
+    }
+}

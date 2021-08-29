@@ -12,8 +12,15 @@ COMPILERS = { # "framework.language.version: compiler"
     "json.v1": json_compiler
 }
 def compile(compiler_name, project_name):
-    compiler = COMPILERS[compiler_name](main_file=project_name)
-    compiled_project = compiler.compile()
+    save_file = ""
+    save = False
+    if len(sys.argv) >= 4:
+        save_file = sys.argv[4]
+        save = True
+    else:
+        save_file = "build"
+    compiler = COMPILERS[compiler_name](main_file=project_name, save_file=save_file)
+    compiled_project = compiler.compile(save=save)
     print(compiled_project)
     # TODO: propper file extension and format saving
     '''

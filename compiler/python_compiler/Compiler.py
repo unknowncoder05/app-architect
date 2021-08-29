@@ -12,7 +12,8 @@ ENGINES = {
 class Compiler:
     blueprint: dict = {}
 
-    def __init__(self, *, main_file:str = "", blueprint:dict = {}) -> None:
+    def __init__(self, *, save_file, main_file:str = "", blueprint:dict = {}) -> None:
+        self.save_file = save_file
         if main_file:
             self.main_folder = os.path.dirname(main_file)
             self.main_file = main_file
@@ -22,8 +23,8 @@ class Compiler:
         if blueprint:
             self.blueprint = special_flags_processing(blueprint, base_folder=self.main_folder)
             
-    def compile(self) -> dict:
-        build = {}
+    def compile(self, *, save = False) -> dict:
+        build = ""
         if engine_type := self.blueprint.get(FLAG_ENGINE):
             if engine_compiler := ENGINES.get(engine_type):
                 build = engine_compiler(self.blueprint)
@@ -31,4 +32,7 @@ class Compiler:
                 CustomLogging.error(f"Compiler {engine_type} does not exists")
         else:
             CustomLogging.error(f"Flag {FLAG_ENGINE} not defined")
+        if save:
+            with open(self.save_file, "w") as f:
+                f.write(build)
         return build

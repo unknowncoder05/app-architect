@@ -28,7 +28,7 @@ def extends(json_dict, *, base_folder=None, base_dict={}, object_route=""):
     else:
         attr_file_name = search_json(json_dict[FLAG_EXTENDS][FLAG_FROM], base_folder=base_folder)
         if not attr_file_name:
-            CustomLogging.error(f"{json_dict[FLAG_EXTENDS][FLAG_FROM]} path does not exists in")
+            CustomLogging.error(f"{json_dict[FLAG_EXTENDS][FLAG_FROM]} path does not exists")
         attr_json = load_json_as_dict(attr_file_name)
         attr_build = json_global_compile(
             attr_json,
@@ -148,7 +148,8 @@ def json_global_compile(json_dict, *, args = {}, base_folder=None, base_dict={},
 class Compiler:
     blueprint: dict = {}
 
-    def __init__(self, *, main_file) -> None:
+    def __init__(self, *, main_file, save_file) -> None:
+        self.save_file = Path(save_file)
         self.main_folder = Path(os.path.dirname(main_file))
         self.main_file = Path(main_file)
         self.blueprint = load_json_as_dict(self.main_file)
@@ -163,7 +164,7 @@ class Compiler:
                 model_file_name = search_json(
                     models[model], base_folder=self.main_folder)
                 if not model_file_name:
-                    CustomLogging.error(models[model], "path does not exists in")
+                    CustomLogging.error(f"{models[model]} path does not exists")
                     continue
                 model_json = load_json_as_dict(model_file_name)
             elif type(models[model]) == dict:
@@ -196,9 +197,12 @@ class Compiler:
         build[SEVICES_FIELD] = services
         return build
 
-    def compile(self) -> dict:
+    def compile(self, *, save) -> dict:
         build = json_global_compile(self.blueprint, base_folder=self.main_folder)
         build = self.compile_models(build)
         build = self.compile_services(build)
+        if save:
+            with open(self.save_file, "w") as f:
+                json.dump(build, f, indent=4)
         #print(build)
         return build
