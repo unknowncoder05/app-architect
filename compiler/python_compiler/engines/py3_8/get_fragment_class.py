@@ -18,11 +18,11 @@ FRAGMENT_TYPES={
     "return":Return
 }
 
-def get_fragment_class(blueprint, compile):
+def get_fragment_class(blueprint, compile, *, level=0):
     if fragment_type := blueprint.get(ATTRIBUTE_FRAGMENT_TYPE):
         if fragment_class := FRAGMENT_TYPES[fragment_type]:
-            return fragment_class(blueprint, compile=compile)
+            return fragment_class(blueprint, compile=compile, level=level)
         else:
-            CustomLogging.error(f"Fragment type {fragment_type} does not exists")
+            CustomLogging.error(f"Fragment type {fragment_type} does not exist")
     else:
         CustomLogging.error(f"Flag {ATTRIBUTE_FRAGMENT_TYPE} not defined in blueprint")

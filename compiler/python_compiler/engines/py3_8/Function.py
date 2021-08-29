@@ -6,7 +6,7 @@ from python_compiler.engines.utils.types import get_python_type_str, ANY
 
 def get_function_name(fragment) -> str:
     if not (function_name := fragment.get(ATTRIBUTE_FUNCTION_NAME)):
-        CustomLogging.critical(f"Fragment type functions 'name' attribute does not exists")
+        CustomLogging.critical(f"Fragment type functions 'name' attribute does not exist")
     return function_name
 
 def get_function_args(fragment) -> dict:
@@ -50,7 +50,7 @@ class Function(Fragment):
         if self.kwargs:
             function_kwargs = FunctionArgs(self.kwargs, compile=self.general_compile)
             if self.args:
-                inputs_build += ","
+                inputs_build += "," # TODO: disguisting but effective
             inputs_build += f" *, {function_kwargs.compile()}"
         return inputs_build
     def outputs_compile(self) -> str:
@@ -63,7 +63,7 @@ class Function(Fragment):
     def code_lines_compile(self) -> list:
         code_build_lines = []
         for line in self.code:
-            code_build_lines.append(TAB+self.general_compile(line))
+            code_build_lines.append(TAB*(self.level+1)+self.general_compile(line, level=self.level+1))
         return code_build_lines
     def compile(self)->str:
         fragment_lines = []

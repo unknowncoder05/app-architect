@@ -23,7 +23,7 @@ ASSIGN_OPERATORS = {
 
 def get_variable_name(fragment) -> str:
     if not (variable_name := fragment.get(ATTRIBUTE_VARIABLE_NAME)):
-        CustomLogging.critical(f"Fragment type variable '{ATTRIBUTE_VARIABLE_NAME}' attribute does not exists")
+        CustomLogging.critical(f"Fragment type variable '{ATTRIBUTE_VARIABLE_NAME}' attribute does not exist")
     return variable_name
 
 def get_variable_type(fragment) -> str:
@@ -40,7 +40,7 @@ def get_variable_assign_operator(fragment) -> str:
 
 def get_variable_expression(fragment) -> str:
     if not (variable_expression := fragment.get(ATTRIBUTE_VARIABLE_EXPRESSION)):
-        CustomLogging.critical(f"Fragment type variable '{ATTRIBUTE_VARIABLE_EXPRESSION}' attribute does not exists")
+        CustomLogging.critical(f"Fragment type variable '{ATTRIBUTE_VARIABLE_EXPRESSION}' attribute does not exist")
     return variable_expression
 
 
