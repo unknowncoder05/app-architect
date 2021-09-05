@@ -7,6 +7,7 @@ from .Variable import Variable
 from .Conditional import Conditional
 from .FunctionCall import FunctionCall
 from .Return import Return
+from .For import For
 
 
 FRAGMENT_TYPES={
@@ -15,7 +16,8 @@ FRAGMENT_TYPES={
     "class":Fragment,
     "variable":Variable,
     "conditional":Conditional,
-    "return":Return
+    "return":Return,
+    "for":For
 }
 
 def get_fragment_class(blueprint, compile, *, level=0):

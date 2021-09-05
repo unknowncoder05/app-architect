@@ -14,7 +14,7 @@ FLAG_INCLUDES = to_flag("includes")
 FLAG_FROM = to_flag("from")
 
 
-TAB = "\t"
+TAB = ["\t", " "*4,"*"][1]
 
 ATTRIBUTE_FRAGMENT_TYPE = "type"
 ATTRIBUTE_TYPE = "type"
@@ -34,6 +34,11 @@ ATTRIBUTE_VARIABLE_NAME = "name"
 ATTRIBUTE_VARIABLE_TYPE = "variable_type"
 ATTRIBUTE_VARIABLE_EXPRESSION = "expression"
 ATTRIBUTE_VARIABLE_ASSIGN_OPERATOR = "assign_operator"
+
+ATTRIBUTE_FOR_ITERATORS = "iterators"
+ATTRIBUTE_FOR_SEQUENCE = "sequence"
+ATTRIBUTE_FOR_CODE = "code"
+ATTRIBUTE_FOR_ELSE_CODE = "else"
 
 ATTRIBUTE_CONDITIONAL_CONDITION = "condition"
 ATTRIBUTE_CONDITIONAL_CODE = "code"

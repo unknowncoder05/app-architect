@@ -1,0 +1,55 @@
+{
+    "engine": "python3.8",
+    "__description": "checks if is prime",
+    "__constructor":{
+        "number_a":{"type":"str", "default":"num"},
+        "function_name":{"type":"str", "default":"is_prime"}
+    },
+    "type": "function",
+    "name": "__function_name",
+    "args":{
+        "__number_a":{"type":"int", "required":true}
+    },
+    "kwargs":{
+        "debug":{"type":"bool", "default":false}
+    },
+    "outputs":{
+        "is_prime":{"type":"bool", "required":true}
+    },
+    "code": [
+        {
+            "type": "conditional",
+            "condition": "__number_a == 0 or __number_a == 1",
+            "code": [
+                {
+                    "type": "return",
+                    "args": ["False"]
+                }
+            ]
+        },
+        {
+            "type": "for",
+            "iterators": ["x"],
+            "sequence": "range(2, num)",
+            "code": [
+                {
+                    "type": "conditional",
+                    "condition": "__number_a % x == 0",
+                    "code": [
+                        {
+                            "type": "return",
+                            "args": ["False"]
+                        }
+                    ]
+                }
+            ],
+            "else": [
+                {
+                    "type": "return",
+                    "args": ["True"]
+                }
+            ]
+        }
+        
+    ]
+}

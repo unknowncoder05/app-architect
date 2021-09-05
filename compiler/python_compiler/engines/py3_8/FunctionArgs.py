@@ -7,7 +7,7 @@ from python_compiler.engines.utils.types import get_python_type_str, ANY
 class FunctionArgs(Fragment):
     def __init__(self, blueprint, *args, **kwargs) -> None:
         super().__init__(blueprint, *args, **kwargs)
-    def compile(self)->str:
+    def compile(self) -> str:
         fragment_build = ""
         cleaned_args = []
         for arg in self.blueprint:

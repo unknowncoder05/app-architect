@@ -55,7 +55,14 @@ class Variable(Fragment):
         self.variable_type = get_variable_type(blueprint)
         self.assign_operator = get_variable_assign_operator(blueprint)
         self.expression = get_variable_expression(blueprint)
-    def compile(self)->str:
-        fragment_build = ""
-        fragment_build = f"{self.name}{self.variable_type} {self.assign_operator} {self.expression}"
+    
+    def get_lines(self) -> list:
+        fragment_lines = []
+        fragment_lines.append(f"{self.name}{self.variable_type} {self.assign_operator} {self.expression}")
+        fragment_lines = self.tabulate(fragment_lines)
+        return fragment_lines
+    
+    def compile(self) -> str:
+        
+        fragment_build = "\n".join(self.get_lines())
         return fragment_build

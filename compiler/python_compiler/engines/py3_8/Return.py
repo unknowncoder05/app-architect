@@ -13,8 +13,18 @@ class Return(Fragment):
     def __init__(self, blueprint, *args, **kwargs) -> None:
         super().__init__( blueprint, *args, **kwargs)
         self.return_attributes = get_return_attributes(blueprint)
-    def compile(self)->str:
-        fragment_build = ""
+    
+    def return_compile(self) -> list:
         return_attributes_build = ", ".join(self.return_attributes)
-        fragment_build = f"return {return_attributes_build}"
+        return_fragment_build = f"return {return_attributes_build}"
+        return [return_fragment_build]
+    
+    def get_lines(self) -> list:
+        fragment_lines = []
+        fragment_lines.extend(self.return_compile())
+        fragment_lines = self.tabulate(fragment_lines)
+        return fragment_lines
+    
+    def compile(self) -> str:
+        fragment_build = "\n".join(self.get_lines())
         return fragment_build

@@ -48,3 +48,4 @@ main()
 # python .\compiler.py c "django.json.v1" ../blueprints/examples/facebook/main.app.json build
 # python .\compiler.py c "python.json.v1" ../blueprints/examples/calculator/v2/services/processing/operations/sum.code.json build/build
 
+# python .\compiler\compiler.py c "python.json.v1" ./blueprints/global/utils/code/is_prime.json code.py

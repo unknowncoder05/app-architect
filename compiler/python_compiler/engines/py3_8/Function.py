@@ -60,15 +60,14 @@ class Function(Fragment):
                 arg_type_name = ANY
             outputs_build += f"->{get_python_type_str(arg_type_name)}"
         return outputs_build
-    def code_lines_compile(self) -> list:
-        code_build_lines = []
-        for line in self.code:
-            code_build_lines.append(TAB*(self.level+1)+self.general_compile(line, level=self.level+1))
-        return code_build_lines
-    def compile(self)->str:
+    
+    def get_lines(self) -> list:
         fragment_lines = []
         fragment_lines.append(f"def {self.name}({self.inputs_compile()}){self.outputs_compile()}:")
-        fragment_lines.extend(self.code_lines_compile())
-        fragment_build = "\n".join(fragment_lines)
-        
+        fragment_lines.extend(self.code_lines_compile(self.code))
+        fragment_lines = self.tabulate(fragment_lines)
+        return fragment_lines
+    
+    def compile(self) -> str:
+        fragment_build = "\n".join(self.get_lines())
         return fragment_build

@@ -37,7 +37,13 @@ class FunctionCall(Fragment):
 
         inputs_build = ", ".join(inputs)
         return inputs_build
-    def compile(self)->str:
-        fragment_build = f"{self.name}({self.inputs_compile()})"
-        
+    
+    def get_lines(self) -> list:
+        fragment_lines = []
+        fragment_lines.append(f"{self.name}({self.inputs_compile()})")
+        fragment_lines = self.tabulate(fragment_lines)
+        return fragment_lines
+
+    def compile(self) -> str:
+        fragment_build = "\n".join(self.get_lines())
         return fragment_build
