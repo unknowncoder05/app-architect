@@ -6,7 +6,7 @@ from python_compiler.engines.utils.types import get_python_type_str, ANY
 
 def get_function_name(fragment) -> str:
     if not (function_name := fragment.get(ATTRIBUTE_FUNCTION_NAME)):
-        CustomLogging.critical(f"Fragment type functions 'name' attribute does not exist")
+        CustomLogging.critical(f"Required Fragment type functions 'name' attribute does not exist")
     return function_name
 
 def get_function_args(fragment) -> dict:
@@ -24,9 +24,9 @@ def get_function_outputs(fragment) -> dict:
         function_outputs = {}
     return function_outputs
 
-def get_function_code(fragment) -> dict:
+def get_function_code(fragment) -> list:
     if not (function_code := fragment.get(ATTRIBUTE_FUNCTION_CODE)):
-        function_code = {}
+        function_code = []
     return function_code
 
 class Function(Fragment):

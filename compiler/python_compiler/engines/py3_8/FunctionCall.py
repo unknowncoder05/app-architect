@@ -5,7 +5,7 @@ from python_compiler.engines.utils.types import get_python_type_str, ANY
 
 def get_function_name(fragment) -> str:
     if not (function_name := fragment.get(ATTRIBUTE_FUNCTION_CALL_NAME)):
-        CustomLogging.critical(f"Fragment type function_call '{ATTRIBUTE_FUNCTION_CALL_NAME}' attribute does not exist")
+        CustomLogging.critical(f"Required Fragment type function_call '{ATTRIBUTE_FUNCTION_CALL_NAME}' attribute does not exist")
     return function_name
 
 def get_function_args(fragment) -> dict:
@@ -33,7 +33,7 @@ class FunctionCall(Fragment):
             inputs = self.args
         
         if self.kwargs:
-            inputs.extend([ f"{x}:{self.kwargs[x]}" for x in self.kwargs])
+            inputs.extend([ f"{x}={self.kwargs[x]}" for x in self.kwargs])
 
         inputs_build = ", ".join(inputs)
         return inputs_build

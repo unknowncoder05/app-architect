@@ -22,10 +22,11 @@ class Fragment:
             code_build_lines.extend(line_build)
         return code_build_lines
     
-    def tabulate(self, lines) -> list:
+    def tabulate(self, lines, custom_tabs=0) -> list:
         tabulated_lines = []
         for line in lines:
-            tabs = TAB * ( 0 if self.level == 0 else 1)
+            level = self.level if custom_tabs == 0 else custom_tabs
+            tabs = TAB * ( 0 if level == 0 else 1)
             tabulated_lines.append(tabs+line)
         return tabulated_lines
 

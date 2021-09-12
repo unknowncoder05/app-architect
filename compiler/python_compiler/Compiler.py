@@ -1,9 +1,11 @@
 import os
 import json
+from pathlib import Path
 
 from json_compiler.Compiler import Compiler as json_compiler, special_flags_processing, load_json_as_dict
 from .engines.py3_8.Compiler import compile as py3_9_compiler
 from utils.CustomLogging import CustomLogging
+
 
 FLAG_ENGINE = "engine"
 ENGINES = {
@@ -12,8 +14,8 @@ ENGINES = {
 class Compiler:
     blueprint: dict = {}
 
-    def __init__(self, *, save_file, main_file:str = "", blueprint:dict = {}) -> None:
-        self.save_file = save_file
+    def __init__(self, *, save_folder:str="", main_file:str="", blueprint:dict={}) -> None:
+        self.save_folder = Path(save_folder)
         if main_file:
             self.main_folder = os.path.dirname(main_file)
             self.main_file = main_file
@@ -22,7 +24,7 @@ class Compiler:
                 self.blueprint = special_flags_processing(raw_blueprint, base_folder=self.main_folder)
         if blueprint:
             self.blueprint = special_flags_processing(blueprint, base_folder=self.main_folder)
-            
+        
     def compile(self, *, save = False) -> dict:
         build = ""
         if engine_type := self.blueprint.get(FLAG_ENGINE):
@@ -32,7 +34,10 @@ class Compiler:
                 CustomLogging.error(f"Compiler {engine_type} does not exists")
         else:
             CustomLogging.error(f"Flag {FLAG_ENGINE} not defined")
+        file_path = str(self.save_folder / (self.blueprint.get("name","main")+".py"))
         if save:
-            with open(self.save_file, "w") as f:
+            with open(file_path, "w") as f:
                 f.write(build)
-        return build
+        files = {}
+        files[file_path] = build
+        return files

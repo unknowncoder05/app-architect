@@ -3,6 +3,7 @@ from utils.CustomLogging import CustomLogging
 
 from .Fragment import Fragment
 from .Function import Function
+from .Class import Class
 from .Variable import Variable
 from .Conditional import Conditional
 from .FunctionCall import FunctionCall
@@ -11,9 +12,9 @@ from .For import For
 
 
 FRAGMENT_TYPES={
+    "class": Class,
     "function": Function,
     "function_call":FunctionCall,
-    "class":Fragment,
     "variable":Variable,
     "conditional":Conditional,
     "return":Return,

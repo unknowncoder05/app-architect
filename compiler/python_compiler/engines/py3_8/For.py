@@ -5,22 +5,22 @@ from python_compiler.engines.utils.types import get_python_type_str, ANY
 
 def get_for_code(fragment) -> str:
     if not (code := fragment.get(ATTRIBUTE_FOR_CODE)):
-        CustomLogging.critical(f"Fragment type for '{ATTRIBUTE_FOR_CODE}' attribute does not exist")
+        CustomLogging.critical(f"Required Fragment type for '{ATTRIBUTE_FOR_CODE}' attribute does not exist")
     return code
 
 def get_for_else_code(fragment) -> str:
     if not (code := fragment.get(ATTRIBUTE_FOR_ELSE_CODE)):
-        CustomLogging.critical(f"Fragment type for '{ATTRIBUTE_FOR_ELSE_CODE}' attribute does not exist")
+        CustomLogging.critical(f"Required Fragment type for '{ATTRIBUTE_FOR_ELSE_CODE}' attribute does not exist")
     return code
 
 def get_for_iterators(fragment) -> list:
     if not (iterators := fragment.get(ATTRIBUTE_FOR_ITERATORS)):
-        CustomLogging.critical(f"Fragment type for '{ATTRIBUTE_FOR_ITERATORS}' attribute does not exist")
+        CustomLogging.critical(f"Required Fragment type for '{ATTRIBUTE_FOR_ITERATORS}' attribute does not exist")
     return iterators
 
 def get_for_sequence(fragment) -> list:
     if not (sequence := fragment.get(ATTRIBUTE_FOR_SEQUENCE)):
-        CustomLogging.critical(f"Fragment type for '{ATTRIBUTE_FOR_SEQUENCE}' attribute does not exist")
+        CustomLogging.critical(f"Required Fragment type for '{ATTRIBUTE_FOR_SEQUENCE}' attribute does not exist")
     return sequence
 
 

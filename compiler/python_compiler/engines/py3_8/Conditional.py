@@ -5,12 +5,12 @@ from python_compiler.engines.utils.types import get_python_type_str, ANY
 
 def get_conditional_condition(fragment) -> str:
     if not (condition := fragment.get(ATTRIBUTE_CONDITIONAL_CONDITION)):
-        CustomLogging.critical(f"Fragment type conditional '{ATTRIBUTE_CONDITIONAL_CONDITION}' attribute does not exist")
+        CustomLogging.critical(f"Required Fragment type conditional '{ATTRIBUTE_CONDITIONAL_CONDITION}' attribute does not exist")
     return condition
 
 def get_conditional_code(fragment) -> list:
     if not (code := fragment.get(ATTRIBUTE_CONDITIONAL_CODE)):
-        CustomLogging.critical(f"Fragment type conditional '{ATTRIBUTE_CONDITIONAL_CODE}' attribute does not exist")
+        CustomLogging.critical(f"Required Fragment type conditional '{ATTRIBUTE_CONDITIONAL_CODE}' attribute does not exist")
     return code
 class Conditional(Fragment):
     condition:str

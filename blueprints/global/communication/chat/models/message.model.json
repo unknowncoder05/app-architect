@@ -9,7 +9,7 @@
         "id": {"type":"id", "required":true},
         "conversation": {"type":"conversation", "required":true},
         "user":{"type":"__user", "required":true},
-        "content":{"type":"str", "required":true},
+        "content":{"type":"str", "max":300, "required":true},
         "read_by":{"many":true, "type":"__user", "required":true}
     },
     "create":{
