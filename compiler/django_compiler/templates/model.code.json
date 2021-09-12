@@ -1,17 +1,17 @@
 {
-    "engine": "python3.8/django3.2",
+    "engine": "python3.8",
     "__constructor":{
         "model_name":{"type":"str", "default":"CharField"},
-        "args":{"type":"dict"},
+        "attributes":{"type":"dict"},
         "desc":{"type":"str", "default":"template for django models"}
     },
     "description": "__desc",
-    "import":{
+    "imports":{
        "models":{"from":"django.db"}
     },
     "type": "class",
     "name": "__model_name",
     "extends": ["models.Model"],
-    "args":"__args",
+    "attributes":"__attributes",
     "code": []
 }

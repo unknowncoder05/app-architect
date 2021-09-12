@@ -3,9 +3,12 @@ import json
 from pathlib import Path
 
 from json_compiler.Compiler import Compiler as json_compiler, special_flags_processing, load_json_as_dict, object_route_join
+from python_compiler.Compiler import Compiler as python_compiler
 from utils.CustomLogging import CustomLogging
 from utils.flags import *
 
+
+CURRENT_PYTHON_ENGINE = "python3.8"
 DJANGO_FIELD_TYPES = {
     "email":{
         "name":"CharField",
@@ -57,7 +60,6 @@ def compile_field(field_dict, model_names, *, base_folder="", object_route=""):
     if "max" in field_dict and "max" in field_type:
         field_kwargs[field_type["max"]] = field_dict["max"]
     field_call_definition = {
-        "type":"function_call",
         "function":f"models.{field_type['name']}",
         "kwargs":field_kwargs,
         "args":field_args
@@ -66,14 +68,14 @@ def compile_field(field_dict, model_names, *, base_folder="", object_route=""):
     #compiled = f"models.{field_type['name']}({field_compiled_args})"
     return field_call_definition#compiled
 def compile_model(model_name:str, model_dict:dict, model_names:list, *, base_folder="", base_dict={}, object_route=""):
-    atributes = {}
+    attributes = {}
     for field_name in model_dict:
         compiled_field = compile_field(model_dict[field_name], model_names, base_folder=base_folder, object_route=object_route_join(object_route, field_name))
         if compiled_field:
-            atributes[field_name] = compiled_field
+            attributes[field_name] = compiled_field
     args = {
         "model_name":model_name.title(),
-        "args": atributes,
+        "attributes": attributes,
         "desc":"__model_name model class" # recursive constructor
     }
     dir = Path(os.path.dirname(__file__))
@@ -86,15 +88,15 @@ def compile_model(model_name:str, model_dict:dict, model_names:list, *, base_fol
 class Compiler:
     blueprint: dict = {}
 
-    def __init__(self, *, main_file, save_file) -> None:
+    def __init__(self, *, main_file, save_folder) -> None:
         self.main_folder = Path(os.path.dirname(main_file))
         self.main_file = Path(main_file)
-        self.save_file = Path(save_file)
+        self.save_folder = Path(save_folder)
 
-        jcompiler = json_compiler(self.main_file)
-        self.blueprint = jcompiler.compile()
+        jcompiler = json_compiler(main_file=main_file, save_folder="temp")
+        self.blueprint = jcompiler.compile()["temp"]
 
-    def compile_models(self, build):
+    def compile_models_to_json(self, build:dict) -> dict:
         if MODELS_FIELD not in build:
             CustomLogging.error(f"{MODELS_FIELD} field is not defined")
         models = build[MODELS_FIELD]
@@ -102,9 +104,17 @@ class Compiler:
         for model in models.copy():
             compiled_model = compile_model(model, models[model]["attributes"], self.model_names, base_folder=self.main_folder, base_dict=models[model], object_route=model)
             models[model] = compiled_model
-        build[MODELS_FIELD] = models
-        return build
-    def compile_services(self, build):
+        return models
+    def compile_model_lines(self, build:dict) -> str:
+        model_json_build = self.compile_models_to_json(build)
+        model_build = ""
+        for model in model_json_build:
+            model_python_compiler = python_compiler(main_file=self.main_file, blueprint=model_json_build[model])
+            model_code = model_python_compiler.compile()
+            model_build += model_code[list(model_code.keys())[0]]
+            model_build += "\n"*2
+        return model_build
+    def compile_services(self, build:dict) -> dict:
         if SEVICES_FIELD not in build:
             CustomLogging.error(f"{SEVICES_FIELD} field is not defined")
         services = build[SEVICES_FIELD]
@@ -113,8 +123,10 @@ class Compiler:
         build[SEVICES_FIELD] = services
         return build
 
-    def compile(self) -> dict:
-        build = self.compile_models(self.blueprint)
+    def compile(self, *, save:bool=False) -> dict:
+        model_build = self.compile_model_lines(self.blueprint)
         #build = self.compile_services(build)
-        #print(build)
-        return build
+        files = {}
+        files[str(self.save_folder/"models.py")] = model_build
+        print(model_build)
+        return files
