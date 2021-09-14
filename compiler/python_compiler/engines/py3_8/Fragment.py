@@ -1,10 +1,11 @@
 from utils.flags import *
+from python_compiler.utils.flags import *
 
 class Fragment:
     blueprint = {}
     general_compile = None#:function
     level = 0
-    inports = []
+
     def __init__(self, blueprint, *, compile, level=0) -> None:
         self.general_compile = compile
         self.blueprint = blueprint
@@ -31,6 +32,8 @@ class Fragment:
         return tabulated_lines
 
     def compile(self) -> str:
-        fragment_build = self.blueprint.get("type","")
+        fragment_build = self.blueprint.get(ATTRIBUTE_FRAGMENT_TYPE,"")
         return fragment_build
     
+    def get_imports(self) -> dict:
+        return self.blueprint.get(ATTRIBUTE_FRAGMENT_IMPORTS,{})

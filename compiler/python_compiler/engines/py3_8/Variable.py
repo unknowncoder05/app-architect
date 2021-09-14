@@ -1,5 +1,6 @@
 from .Fragment import Fragment
 from utils.flags import *
+from python_compiler.utils.flags import *
 from utils.CustomLogging import CustomLogging
 #from python_compiler.engines.utils.types import get_python_type_str, ANY
 

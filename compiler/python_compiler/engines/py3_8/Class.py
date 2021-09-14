@@ -1,6 +1,7 @@
 from .Fragment import Fragment
 from .FunctionCall import FunctionCall
 from utils.flags import *
+from python_compiler.utils.flags import *
 from utils.CustomLogging import CustomLogging
 
 def get_class_name(fragment) -> str:

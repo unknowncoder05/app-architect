@@ -6,6 +6,7 @@ from json_compiler.Compiler import Compiler as json_compiler, special_flags_proc
 from python_compiler.Compiler import Compiler as python_compiler
 from utils.CustomLogging import CustomLogging
 from utils.flags import *
+from python_compiler.utils.flags import *
 
 
 CURRENT_PYTHON_ENGINE = "python3.8"
@@ -87,6 +88,7 @@ def compile_model(model_name:str, model_dict:dict, model_names:list, *, base_fol
 
 class Compiler:
     blueprint: dict = {}
+    models_imports: dict = {}
 
     def __init__(self, *, main_file, save_folder) -> None:
         self.main_folder = Path(os.path.dirname(main_file))
@@ -96,24 +98,44 @@ class Compiler:
         jcompiler = json_compiler(main_file=main_file, save_folder="temp")
         self.blueprint = jcompiler.compile()["temp"]
 
-    def compile_models_to_json(self, build:dict) -> dict:
-        if MODELS_FIELD not in build:
+    def compile_models_to_json(self) -> dict:
+        if MODELS_FIELD not in self.blueprint:
             CustomLogging.error(f"{MODELS_FIELD} field is not defined")
-        models = build[MODELS_FIELD]
+        models = self.blueprint[MODELS_FIELD]
         self.model_names = list(models.keys())
         for model in models.copy():
             compiled_model = compile_model(model, models[model]["attributes"], self.model_names, base_folder=self.main_folder, base_dict=models[model], object_route=model)
             models[model] = compiled_model
         return models
-    def compile_model_lines(self, build:dict) -> str:
-        model_json_build = self.compile_models_to_json(build)
+
+    def compile_models(self) -> list:
+        model_json_build = self.compile_models_to_json()
         model_build = ""
         for model in model_json_build:
             model_python_compiler = python_compiler(main_file=self.main_file, blueprint=model_json_build[model])
-            model_code = model_python_compiler.compile()
-            model_build += model_code[list(model_code.keys())[0]]
+            model_code = model_python_compiler.compile(imports=False)
+            self.models_imports.update(model_python_compiler.imports)
+            page = model_code[list(model_code.keys())[0]]
+            model_build += page
             model_build += "\n"*2
         return model_build
+    
+    def compile_import_lines(self):
+        for import_name in self.models_imports:
+            from_statement = ""
+            as_statement = ""
+            import_definition = self.models_imports[import_name]
+            if ATTRIBUTE_IMPORT_FROM in import_definition:
+                from_statement = f"from {import_definition[ATTRIBUTE_IMPORT_FROM]} "
+            if ATTRIBUTE_IMPORT_AS in import_definition:
+                as_statement = f" as {import_definition[ATTRIBUTE_IMPORT_AS]}"
+            yield f"{from_statement}import {import_name}{as_statement}"
+    
+    def compile_imports(self):
+        imports_build = ""
+        for line in self.compile_import_lines():
+            imports_build += line+"\n"
+        return imports_build
     def compile_services(self, build:dict) -> dict:
         if SEVICES_FIELD not in build:
             CustomLogging.error(f"{SEVICES_FIELD} field is not defined")
@@ -124,9 +146,11 @@ class Compiler:
         return build
 
     def compile(self, *, save:bool=False) -> dict:
-        model_build = self.compile_model_lines(self.blueprint)
+        model_build = self.compile_models()
+        model_imports_build = self.compile_imports()
         #build = self.compile_services(build)
         files = {}
-        files[str(self.save_folder/"models.py")] = model_build
-        print(model_build)
+        model_page = model_imports_build+"\n"*2+model_build
+        files[str(self.save_folder/"models.py")] = model_page
+        print(model_page)
         return files

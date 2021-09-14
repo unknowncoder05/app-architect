@@ -1,4 +1,5 @@
 from utils.flags import *
+from python_compiler.utils.flags import *
 from utils.CustomLogging import CustomLogging
 
 from .Fragment import Fragment
