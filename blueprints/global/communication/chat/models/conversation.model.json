@@ -6,7 +6,9 @@
         }
     },
     "attributes":{
-        "id": {"type":"id", "required":true},
+        "__extends":{
+            "__from":"global.utils.models.base"
+        },
         "name": {"type":"str", "max":50, "required":true},
         "users":{"many":true,"type":"__user", "required":true}
     },

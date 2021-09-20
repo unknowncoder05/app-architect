@@ -1,0 +1,5 @@
+{
+    "id": {"type":"id", "required":true},
+    "created_at":{ "type":"datetime", "on_create":true },
+    "updated_at":{ "type":"datetime", "on_update":true }
+}

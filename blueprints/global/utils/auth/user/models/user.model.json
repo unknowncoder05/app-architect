@@ -3,7 +3,8 @@
         "id": {"type":"id"},
         "name":{"type":"str", "max":20, "required":true},
         "email":{"type":"email", "max":20, "required":true},
-        "password":{"type":"password", "max":100, "required":false}
+        "password":{"type":"password", "max":100, "required":false},
+        "is_verfied":{"type":"bool", "default":false}
     },
     "create":{
         "request":{

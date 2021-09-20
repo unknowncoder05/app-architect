@@ -142,14 +142,16 @@ def get_object(route, base_folder):
         object_route=route
     )
     return attr_build
+
 def json_global_compile(json_dict, *, args = {}, base_folder=None, base_dict={}, object_route= ""):
     data = special_flags_processing(json_dict, args=args, base_folder=base_folder, base_dict=json_dict, object_route=object_route)
     return data
+
 class Compiler:
     blueprint: dict = {}
 
-    def __init__(self, *, main_file, save_folder) -> None:
-        self.save_folder = Path(save_folder)
+    def __init__(self, *, main_file, save_folder="") -> None:
+        self.save_folder = os.getcwd() / Path(save_folder)
         self.main_folder = Path(os.path.dirname(main_file))
         self.main_file = Path(main_file)
         self.blueprint = load_json_as_dict(self.main_file)
@@ -201,10 +203,13 @@ class Compiler:
         build = json_global_compile(self.blueprint, base_folder=self.main_folder)
         build = self.compile_models(build)
         build = self.compile_services(build)
+        save_path = self.save_folder / "build.json"
         if save:
-            with open(self.save_folder, "w") as f:
+            
+            print("saving at",save_path)
+            with open(save_path, "w") as f:
                 json.dump(build, f, indent=4)
         #print(build)
         files = {}
-        files[str(self.save_folder)] = build
+        files["file"] = build
         return files

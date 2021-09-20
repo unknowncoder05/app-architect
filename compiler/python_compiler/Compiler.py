@@ -11,6 +11,27 @@ FLAG_ENGINE = "engine"
 ENGINES = {
     "python3.8":py3_9_compiler
 }
+def compile_import_lines_generator(import_definition:dict, import_name:str) -> str:
+    """Import definition like
+    "compile":{
+        "from":".engines.py3_8.Compiler",
+        "as":"py3_9_compiler"
+    }
+    equals
+    from .engines.py3_8.Compiler import compile as py3_9_compiler
+    """
+    from_statement = ""
+    as_statement = ""
+    if "from" in import_definition:
+        from_statement = f"from {import_definition['from']} "
+    if "as" in import_definition:
+        as_statement = f" as {import_definition['as']}"
+    return f"{from_statement}import {import_name}{as_statement}"
+
+def compile_import_lines_generator(imports:list):
+    for import_name in imports:
+        yield compile_import_lines_generator(imports[import_name], import_name)
+
 class Compiler:
     blueprint: dict = {}
     imports: dict = {}
@@ -25,20 +46,10 @@ class Compiler:
                 self.blueprint = special_flags_processing(raw_blueprint, base_folder=self.main_folder)
         if blueprint:
             self.blueprint = special_flags_processing(blueprint, base_folder=self.main_folder)
-    def compile_import_lines(self):
-        for import_name in self.models_imports:
-            from_statement = ""
-            as_statement = ""
-            import_definition = self.models_imports[import_name]
-            if "from" in import_definition:
-                from_statement = f"from {import_definition['from']} "
-            if "as" in import_definition:
-                as_statement = f" as {import_definition['as']}"
-            yield f"{from_statement}import {import_name}{as_statement}"
     
     def compile_imports(self) -> str:
         imports_build = ""
-        for line in self.compile_import_lines():
+        for line in compile_import_lines_generator(self.models_imports):
             imports_build += line+"\n"
         return imports_build
 
